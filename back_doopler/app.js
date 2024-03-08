@@ -9,7 +9,8 @@ const cors = require('cors');
 // Lecture du fichier models/index.js afin de lancer la synchronisation de Sequelize
 require('./models/index.js');
 
-let indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index');
+const adminRouter = require('./routes/admin.js');
 
 let app = express();
 
@@ -21,5 +22,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 app.use('/', indexRouter);
+app.use('/admin', adminRouter);
 
 module.exports = app;
