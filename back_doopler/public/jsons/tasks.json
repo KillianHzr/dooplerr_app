@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "title": "Faire la vaisselle",
+        "due_date": "2025-11-26T11:40:08.985Z",
+        "done": false,
+        "user": "Michel",
+        "description": "bla bla bla bla...",
+        "creation_date": "2023-11-26T11:49:06.985Z"
+    },
+    {
+        "id": 2,
+        "title": "Cuisiner barbecu",
+        "due_date": "2025-10-26T11:40:09.985Z",
+        "done": true,
+        "user": "Pierre",
+        "description": "bla bla bla bla...",
+        "creation_date": "2023-10-26T11:49:06.985Z"
+    },
+    {
+        "id": 3,
+        "title": "Nettoyer setup RTX 3080 NVIDIA 32GB RAM VIVE",
+        "due_date": "2025-09-26T11:40:10.985Z",
+        "done": false,
+        "user": "Michel",
+        "description": "bla bla bla bla...",
+        "creation_date": "2023-10-26T11:49:06.985Z"
+    }
+]
