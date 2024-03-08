@@ -1,3 +1,4 @@
+// models/episode.js
 const sequelize = require('./_database');
 const { DataTypes } = require('sequelize');
 
@@ -15,7 +16,7 @@ const Episode = sequelize.define('Episode', {
         allowNull: false
     },
     duration: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.TIME,
         allowNull: false
     },
     file_path: {
@@ -25,3 +26,4 @@ const Episode = sequelize.define('Episode', {
 });
 
 module.exports = Episode;
+

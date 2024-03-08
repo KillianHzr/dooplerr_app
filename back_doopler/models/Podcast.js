@@ -1,3 +1,4 @@
+// models/podcast.js
 const sequelize = require('./_database');
 const { DataTypes } = require('sequelize');
 
