@@ -5,7 +5,8 @@ const { DataTypes } = require('sequelize');
 const Podcast = sequelize.define('Podcast', {
     title: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     description: {
         type: DataTypes.TEXT,

@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { Op } = require("sequelize");
 const { Episode, Podcast, Comment, Category } = require("../models/index");
+const { authentificationMiddleware } = require('../middlewares/authentification');
+router.use(authentificationMiddleware);
 
 /* GET home page. */
 router.get("/", function (req, res, next) {

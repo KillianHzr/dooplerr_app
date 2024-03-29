@@ -2,7 +2,7 @@
 const sequelize = require('./_database');
 
 const Podcast = require('./podcast');
-const Episode = require('./episode');
+const Episode = require('./Episode');
 const PodcastEpisode = require('./PodcastEpisode');
 const Comment = require('./Comment');
 const EpisodeComment = require('./EpisodeComment');
