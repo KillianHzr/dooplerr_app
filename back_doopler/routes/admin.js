@@ -19,9 +19,7 @@ router.post("/podcasts", upload.single("thumbnail"), async (req, res) => {
 
     // Vérifier si le fichier thumbnail a été correctement téléchargé
     if (!req.file || !req.file.buffer) {
-      return res
-        .status(400)
-        .json({ error: "Le fichier est requis." });
+      return res.status(400).json({ error: "Le fichier est requis." });
     }
 
     // Envoyer le fichier thumbnail vers S3
@@ -53,10 +51,9 @@ router.post("/podcasts", upload.single("thumbnail"), async (req, res) => {
   }
 });
 
-router.patch("/podcasts/:id", async (req, res) => {
+router.patch("/podcasts/:id", upload.single("thumbnail"), async (req, res) => {
   try {
-    const { title, description, thumbnail_path, public, category_name } =
-      req.body;
+    const { title, description, public, category_name } = req.body;
 
     const podcast = await Podcast.findByPk(req.params.id);
     if (!podcast) {
@@ -87,11 +84,19 @@ router.patch("/podcasts/:id", async (req, res) => {
     // Ajouter l'association avec la nouvelle catégorie
     await podcast.addCategory(newCategory);
 
+    let thumbnailPath = podcast.thumbnail_path; // Garder l'ancien chemin de la miniature par défaut
+
+    // Vérifier s'il y a une nouvelle miniature à télécharger
+    if (req.file) {
+      // Envoyer le nouveau fichier de miniature vers S3
+      thumbnailPath = await uploadToS3(req.file, "thumbnails");
+    }
+
     // Mettre à jour les propriétés du podcast
     await podcast.update({
       title: title,
       description: description,
-      thumbnail_path: thumbnail_path,
+      thumbnail_path: thumbnailPath, // Utiliser le nouveau chemin de la miniature
       public: public,
     });
 
@@ -152,14 +157,13 @@ router.post("/episodes", upload.single("file"), async (req, res) => {
   }
 });
 
-router.patch("/episodes/:id", async (req, res) => {
+router.patch("/episodes/:id", upload.single("file"), async (req, res) => {
   try {
     const {
       title,
       description,
       release_date,
       duration,
-      file_path,
       podcast_name,
     } = req.body;
 
@@ -170,13 +174,18 @@ router.patch("/episodes/:id", async (req, res) => {
         .json({ error: "L'épisode spécifié n'existe pas." });
     }
 
-    const newPodcast = await Podcast.findOne({
-      where: { title: podcast_name },
-    });
-    if (!newPodcast) {
-      return res
-        .status(404)
-        .json({ error: "Le nouveau podcast spécifié n'existe pas." });
+    let newPodcast;
+
+    if (podcast_name) {
+      newPodcast = await Podcast.findOne({
+        where: { title: podcast_name },
+      });
+      
+      if (!newPodcast) {
+        return res
+          .status(404)
+          .json({ error: "Le nouveau podcast spécifié n'existe pas." });
+      }
     }
 
     // Récupérer les anciens podcasts liés à l'épisode
@@ -189,8 +198,18 @@ router.patch("/episodes/:id", async (req, res) => {
       })
     );
 
-    // Ajouter l'association avec le nouveau podcast
-    await episode.addPodcast(newPodcast);
+    // Ajouter l'association avec le nouveau podcast si défini
+    if (newPodcast) {
+      await episode.addPodcast(newPodcast);
+    }
+
+    let filePath = episode.file_path; // Conserver l'ancien chemin du fichier par défaut
+
+    // Vérifier s'il y a un nouveau fichier MP3 à télécharger
+    if (req.file) {
+      // Envoyer le nouveau fichier MP3 vers S3
+      filePath = await uploadToS3(req.file, "episodes");
+    }
 
     // Mettre à jour les propriétés de l'épisode
     await episode.update({
@@ -198,7 +217,7 @@ router.patch("/episodes/:id", async (req, res) => {
       description: description,
       release_date: release_date,
       duration: duration,
-      file_path: file_path,
+      file_path: filePath, // Utiliser le nouveau chemin du fichier MP3
     });
 
     res.json(episode);
@@ -209,6 +228,8 @@ router.patch("/episodes/:id", async (req, res) => {
       .json({ error: "Erreur lors de la modification de l'épisode." });
   }
 });
+
+
 
 // Route pour ajouter une catégorie
 router.post("/categories", async (req, res) => {
