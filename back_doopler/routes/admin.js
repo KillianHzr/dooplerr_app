@@ -1,12 +1,31 @@
 const express = require("express");
 const router = express.Router();
+const path = require("path");
+const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
+
 const { Episode, Podcast, Category } = require("../models/index");
+const { uploadToS3 } = require("../aws");
+
+// Configuration de Multer pour le stockage en mémoire
+const upload = multer({
+  storage: multer.memoryStorage(), // Stocker les fichiers en mémoire
+});
 
 // POST /admin/podcasts
-router.post("/podcasts", async (req, res) => {
+router.post("/podcasts", upload.single("thumbnail"), async (req, res) => {
   try {
-    const { title, description, thumbnail_path, public, category_name } =
-      req.body;
+    const { title, description, public, category_name } = req.body;
+
+    // Vérifier si le fichier thumbnail a été correctement téléchargé
+    if (!req.file || !req.file.buffer) {
+      return res
+        .status(400)
+        .json({ error: "Le fichier est requis." });
+    }
+
+    // Envoyer le fichier thumbnail vers S3
+    const thumbnail_path = await uploadToS3(req.file, "thumbnails");
 
     // Vérifier si la catégorie existe
     const category = await Category.findOne({ where: { name: category_name } });
@@ -86,27 +105,35 @@ router.patch("/podcasts/:id", async (req, res) => {
 });
 
 // POST /admin/episodes
-router.post("/episodes", async (req, res) => {
+router.post("/episodes", upload.single("file"), async (req, res) => {
   try {
-    const {
-      title,
-      description,
-      release_date,
-      duration,
-      file_path,
-      podcast_name,
-    } = req.body;
+    const { title, description, release_date, duration, podcast_name } =
+      req.body;
 
-    // Log req.body just for debugging
-    console.log(req.body);
-
-    const podcast = await Podcast.findOne({ where: { title: podcast_name } }); // Change 'title' to 'podcast_name'
+    // Vérifier si le podcast existe
+    const podcast = await Podcast.findOne({ where: { title: podcast_name } });
     if (!podcast) {
       return res
         .status(404)
         .json({ error: "Le podcast spécifié n'existe pas." });
     }
 
+    // Vérifier si le fichier a été correctement téléchargé
+    if (!req.file || !req.file.buffer) {
+      return res.status(400).json({ error: "Le fichier est requis." });
+    }
+
+    // Vérifier si le fichier est au format MP3
+    if (req.file.mimetype !== "audio/mpeg") {
+      return res
+        .status(400)
+        .json({ error: "Le fichier doit être au format MP3." });
+    }
+
+    // Envoyer le fichier de l'épisode vers S3 dans le dossier "episodes"
+    const file_path = await uploadToS3(req.file, "episodes");
+
+    // Créer l'épisode
     const episode = await Episode.create({
       title,
       description,
@@ -115,6 +142,7 @@ router.post("/episodes", async (req, res) => {
       file_path,
     });
 
+    // Associer l'épisode au podcast
     await podcast.addEpisode(episode);
 
     res.json(episode);
