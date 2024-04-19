@@ -12,7 +12,7 @@ Bienvenue sur Dooplerr, votre nouvelle destination pour découvrir et écouter v
 
 ## Technologies 🔧
 
-- **Front-End** 🖥️: Vue.js 3
+- **Front-End** 🖥️: Nuxt.js
 - **Back-End** 🛠️: Express
 - **Base de Données** 📚: MySQL
 - **Autres Dépendances** 📦: ...
