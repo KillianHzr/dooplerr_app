@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 function authentificationMiddleware(req, res, next) {
-  const whiteList = ['/auth/register', '/auth/login', '/auth/google', '/auth/google/callback'];
+  const whiteList = ['/auth/register', '/auth/login', '/auth/google', '/auth/google/callback', '/auth/apple', '/auth/apple/callback'];
 
   if (whiteList.includes(req.path)) {
     return next();

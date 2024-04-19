@@ -46,6 +46,14 @@ const User = sequelize.define('User', {
     google_id: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    facebook_id: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    apple_id: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 
 });

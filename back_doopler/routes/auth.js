@@ -48,6 +48,13 @@ router.get('/google/callback', passport.authenticate('google'), (req, res) => {
     res.json({ message: 'Connexion réussie', user: req.user, token });
 });
 
+router.get('/apple', passport.authenticate('apple'));
+
+router.get('/apple/callback', passport.authenticate('apple'), (req, res) => {
+    const token = req.user.generateJwtToken();
+    res.json({ message: 'Connexion réussie', user: req.user, token });
+});
+
 
 // Route pour la déconnexion
 router.get("/logout", function (req, res) {
