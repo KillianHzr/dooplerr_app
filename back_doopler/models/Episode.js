@@ -13,11 +13,17 @@ const Episode = sequelize.define('Episode', {
     },
     release_date: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            isDate: true
+        }
     },
     duration: {
         type: DataTypes.TIME,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            isPositive: true
+        }
     },
     file_path: {
         type: DataTypes.STRING,
@@ -26,4 +32,3 @@ const Episode = sequelize.define('Episode', {
 });
 
 module.exports = Episode;
-
