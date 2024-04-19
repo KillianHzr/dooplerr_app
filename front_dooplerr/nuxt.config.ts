@@ -2,7 +2,14 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
-    '@nuxtjs/tailwindcss'
+    ['@nuxtjs/google-fonts', {
+      families: {
+        'Jost': true,
+        download: true,
+        inject: true
+      }
+    }],
+    '@nuxtjs/tailwindcss',
   ],
-  css: ['~/assets/scss/main.scss']
+  css: ['~/assets/scss/main.scss'],
 })
