@@ -32,7 +32,7 @@ router.get("/episodes", async (req, res) => {
 
 router.get("/episodes/:id", async (req, res) => {
   const episode = await Episode.findByPk(req.params.id, {
-    include: Podcast,
+    include: [Podcast, Comment],
   });
   res.json(episode);
 });

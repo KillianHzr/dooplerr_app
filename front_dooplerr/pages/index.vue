@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeroBanner />
-    <div class="container mx-auto">
+    <div class="container mx-auto px-8">
       <h2 class="text-3xl font-bold text-white mb-10">
         Les derniers podcasts
       </h2>
@@ -12,7 +12,7 @@
       </Wrapper>
       <Wrapper display="grid">
         <CardEpisode v-for="episode in episodes" :key="episode.id" :episode="episode"
-          class="group relative aspect-video h-96 min-w-[300px] cursor-pointer overflow-hidden rounded-xl snap-start first:ps-6 w-full">
+          class="group relative aspect-video h-96 min-w-[300px] cursor-pointer overflow-hidden rounded-xl snap-start w-full">
         </CardEpisode>
       </Wrapper>
     </div>
