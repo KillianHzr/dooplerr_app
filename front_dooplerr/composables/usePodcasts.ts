@@ -24,8 +24,26 @@ export const usePodcasts = () => {
     }
   }
 
+  // Ajout d'un podcast avec le user connecté
+  async function addPodcast(formData: FormData) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(`${urlBase}/admin/podcasts`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error adding podcast:", error);
+      throw error;
+    }
+  }
+
   return {
     getPodcasts,
     getPodcastEpisodes,
+    addPodcast,
   };
 };
