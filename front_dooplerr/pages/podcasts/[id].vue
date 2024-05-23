@@ -1,7 +1,7 @@
 <template>
     <div class="container max-w-3xl mx-auto pt-10">
         <!-- Contenu de l'épisode -->
-        <div class="flex">
+        <div class="flex flex-col md:flex-row justify-center items-center">
             <div class="img-podcast w-56 h-56 md:mr-6"
                 :style="{ backgroundImage: 'url(' + podcast.thumbnail_path + ')' }">
             </div>
@@ -12,7 +12,7 @@
         </div>
 
         <!-- Liste des épisodes -->
-        <div class="mt-10">
+        <div class="mt-10 px-6">
             <h2 class="text-3xl font-bold text-white">Les épisodes</h2>
             <div class="flex flex-col gap-2 mt-10">
                 <CardEpisode v-for="episode in podcast.Episodes" :key="episode.id" :episode="episode" class="">

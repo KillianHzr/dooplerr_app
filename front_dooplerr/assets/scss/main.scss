@@ -14,3 +14,15 @@ body{
     display: none;
     visibility: hidden;
 }
+
+@media screen and (max-width: 768px) {
+    .arrow{
+        display: none;
+        visibility: hidden;
+    }
+
+    .wrapper-container::after{
+        display: none;
+    }
+    
+}
