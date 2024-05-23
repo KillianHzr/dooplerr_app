@@ -1,17 +1,17 @@
-const sequelize = require('./_database');
+const sequelize = require("./_database");
 
-const Podcast = require('./podcast');
-const Episode = require('./Episode');
-const PodcastEpisode = require('./PodcastEpisode');
-const Comment = require('./Comment');
-const EpisodeComment = require('./EpisodeComment');
-const Category = require('./Category');
-const PodcastCategory = require('./PodcastCategory');
+const Podcast = require("./Podcast");
+const Episode = require("./Episode");
+const PodcastEpisode = require("./PodcastEpisode");
+const Comment = require("./Comment");
+const EpisodeComment = require("./EpisodeComment");
+const Category = require("./Category");
+const PodcastCategory = require("./PodcastCategory");
 
-const User = require('./User');
-const UserPodcast = require('./UserPodcast');
-const UserComment = require('./UserComment');
-const UserHistory = require('./UserHistory');
+const User = require("./User");
+const UserPodcast = require("./UserPodcast");
+const UserComment = require("./UserComment");
+const UserHistory = require("./UserHistory");
 
 // Configurez les associations
 Podcast.belongsToMany(Episode, { through: PodcastEpisode });
@@ -41,15 +41,15 @@ Episode.belongsToMany(User, { through: UserHistory });
 sequelize.sync();
 
 module.exports = {
-    Podcast: Podcast,
-    Episode: Episode,
-    Comment: Comment,
-    PodcastEpisode: PodcastEpisode,
-    EpisodeComment: EpisodeComment,
-    Category: Category,
-    PodcastCategory: PodcastCategory,
-    User: User,
-    UserPodcast: UserPodcast,
-    UserComment: UserComment,
-    UserHistory: UserHistory
+  Podcast: Podcast,
+  Episode: Episode,
+  Comment: Comment,
+  PodcastEpisode: PodcastEpisode,
+  EpisodeComment: EpisodeComment,
+  Category: Category,
+  PodcastCategory: PodcastCategory,
+  User: User,
+  UserPodcast: UserPodcast,
+  UserComment: UserComment,
+  UserHistory: UserHistory,
 };

@@ -3,8 +3,6 @@ import axios from "axios";
 export const usePodcasts = () => {
   const config = useRuntimeConfig();
   const urlBase = `${config.public.BASE_URL}`;
-  console.log("URL BASE :")
-  console.log(urlBase)
 
   async function getPodcasts() {
     try {

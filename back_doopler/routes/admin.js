@@ -4,8 +4,9 @@ const path = require("path");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 
-const { Episode, Podcast, Category } = require("../models/index");
+const { Episode, Podcast, Category, UserPodcast } = require("../models/index");
 const { uploadToS3 } = require("../aws");
+const { authentificationMiddleware } = require("../middlewares/authentification");
 
 // Configuration de Multer pour le stockage en mémoire
 const upload = multer({
@@ -13,27 +14,25 @@ const upload = multer({
 });
 
 // POST /admin/podcasts
-router.post("/podcasts", upload.single("thumbnail"), async (req, res) => {
+router.post("/podcasts", authentificationMiddleware, upload.single("thumbnail"), async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Aucun utilisateur n'est connecté." });
+  }
+
   try {
     const { title, description, public, category_name } = req.body;
 
-    // Vérifier si le fichier thumbnail a été correctement téléchargé
     if (!req.file || !req.file.buffer) {
       return res.status(400).json({ error: "Le fichier est requis." });
     }
 
-    // Envoyer le fichier thumbnail vers S3
     const thumbnail_path = await uploadToS3(req.file, "thumbnails");
 
-    // Vérifier si la catégorie existe
     const category = await Category.findOne({ where: { name: category_name } });
     if (!category) {
-      return res
-        .status(404)
-        .json({ error: "La catégorie spécifiée n'existe pas." });
+      return res.status(404).json({ error: "La catégorie spécifiée n'existe pas." });
     }
 
-    // Créer le podcast
     const podcast = await Podcast.create({
       title,
       description,
@@ -41,17 +40,22 @@ router.post("/podcasts", upload.single("thumbnail"), async (req, res) => {
       public,
     });
 
-    // Ajouter la catégorie au podcast
     await podcast.addCategory(category);
 
-    res.json(podcast);
+    // Associer l'utilisateur au podcast créé
+    await UserPodcast.create({
+      UserId: req.user.id,
+      PodcastId: podcast.id
+    });
+
+    res.json({ message: "Podcast créé avec succès et associé à l'utilisateur", podcast });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erreur lors de la création du podcast." });
   }
 });
 
-router.patch("/podcasts/:id", upload.single("thumbnail"), async (req, res) => {
+router.patch("/podcasts/:id", authentificationMiddleware, upload.single("thumbnail"), async (req, res) => {
   try {
     const { title, description, public, category_name } = req.body;
 
@@ -60,6 +64,11 @@ router.patch("/podcasts/:id", upload.single("thumbnail"), async (req, res) => {
       return res
         .status(404)
         .json({ error: "Le podcast spécifié n'existe pas." });
+    }
+
+    const isAuthorized = await podcast.hasUser(req.user);
+    if (!isAuthorized) {
+      return res.status(403).json({ error: "Vous n'êtes pas autorisé à modifier ce podcast." });
     }
 
     const newCategory = await Category.findOne({
