@@ -119,7 +119,7 @@ router.patch("/podcasts/:id", authentificationMiddleware, upload.single("thumbna
 });
 
 // POST /admin/episodes
-router.post("/episodes", upload.single("file"), async (req, res) => {
+router.post("/episodes", authentificationMiddleware, upload.single("file"), async (req, res) => {
   try {
     const { title, description, release_date, podcast_name } =
       req.body;
@@ -165,7 +165,7 @@ router.post("/episodes", upload.single("file"), async (req, res) => {
   }
 });
 
-router.patch("/episodes/:id", upload.single("file"), async (req, res) => {
+router.patch("/episodes/:id", authentificationMiddleware, upload.single("file"), async (req, res) => {
   try {
     const {
       title,
@@ -238,7 +238,7 @@ router.patch("/episodes/:id", upload.single("file"), async (req, res) => {
 
 
 // Route pour ajouter une catégorie
-router.post("/categories", async (req, res) => {
+router.post("/categories", authentificationMiddleware, async (req, res) => {
   try {
     const { name, description } = req.body;
     const category = await Category.create({
