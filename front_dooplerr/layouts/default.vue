@@ -6,7 +6,7 @@
       <div id="auth-indicator"
         style="width: 20px; height: 20px; border-radius: 100px; margin-right: 10px; background-color: red;"></div>
       <button v-if="!isAuthenticated" style="margin-right: 10px;">
-        <NuxtLink to="/auth">Login</NuxtLink>
+        <NuxtLink to="/auth/login">Login</NuxtLink>
       </button>
       <button v-if="isAuthenticated" @click="logout">Logout</button>
     </div>
@@ -41,7 +41,7 @@ const logout = () => {
   localStorage.removeItem('token');
   isAuthenticated.value = false;
   checkAuth();
-  router.push('/auth');
+  router.push('/auth/login');
 };
 
 onMounted(() => {

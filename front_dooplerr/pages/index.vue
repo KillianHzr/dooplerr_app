@@ -10,9 +10,11 @@
           class="group relative aspect-video h-96 min-w-[300px] cursor-pointer overflow-hidden rounded-xl snap-start first:ps-6 w-full">
         </CardPodcast>
       </Wrapper>
-      <Wrapper display="grid">
-        <CardEpisode v-for="episode in episodes" :key="episode.id" :episode="episode"
-          class="group relative aspect-video h-96 min-w-[300px] cursor-pointer overflow-hidden rounded-xl snap-start w-full">
+      <h2 class="text-3xl font-bold text-white">
+        Les derniers épisodes
+      </h2>
+      <Wrapper display="list" class="list-content mb-24">
+        <CardEpisode v-for="episode in episodes" :key="episode.id" :episode="episode" class="">
         </CardEpisode>
       </Wrapper>
     </div>

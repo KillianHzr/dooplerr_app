@@ -1,7 +1,7 @@
 <template>
     <div v-if="episode">
         <NuxtLink :to="'/podcasts/episode/' + episode.id">
-            <h2 class="text-3xl font-bold text-white">{{ episode.title }}</h2>
+            <h2 class="text-base font-bold text-white">{{ episode.title }}</h2>
         </NuxtLink>
     </div>
 

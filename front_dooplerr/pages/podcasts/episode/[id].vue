@@ -1,5 +1,5 @@
 <template>
-    <div class="container max-w-screen-sm mx-auto">
+    <div class="container max-w-screen-sm mx-auto mb-28">
         <!-- Titre de l'épisode -->
         <div class="flex justify-around h-32 items-center">
             <h3 class="text-base md:text-xl font-bold text-white">
@@ -55,7 +55,8 @@
             </h2>
             <!-- Form add comment -->
             <div class="flex gap-4">
-                <input type="text" class="w-full border-0 border-b-2 bg-transparent text-white mb-5" placeholder="Ajouter un commentaire">
+                <input type="text" class="w-full border-0 border-b-2 bg-transparent text-white mb-5"
+                    placeholder="Ajouter un commentaire">
             </div>
             <div v-for="comment in episode.Comments" :key="comment.id" class="mb-4">
                 <div class="flex gap-2 items-start">
@@ -79,7 +80,7 @@
                 </div>
             </div>
         </div>
-
+        <div class="w-full h-28"></div>
     </div>
 </template>
 
