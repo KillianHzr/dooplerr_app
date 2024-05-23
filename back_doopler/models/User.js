@@ -32,7 +32,7 @@ const User = sequelize.define('User', {
         allowNull: false
     },
     image_path: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(500),
         allowNull: true
     },
     role: {
