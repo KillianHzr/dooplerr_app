@@ -18,13 +18,6 @@ const Episode = sequelize.define('Episode', {
             isDate: true
         }
     },
-    duration: {
-        type: DataTypes.TIME,
-        allowNull: false,
-        validate: {
-            isPositive: true
-        }
-    },
     file_path: {
         type: DataTypes.STRING,
         allowNull: false

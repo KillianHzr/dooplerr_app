@@ -121,7 +121,7 @@ router.patch("/podcasts/:id", authentificationMiddleware, upload.single("thumbna
 // POST /admin/episodes
 router.post("/episodes", upload.single("file"), async (req, res) => {
   try {
-    const { title, description, release_date, duration, podcast_name } =
+    const { title, description, release_date, podcast_name } =
       req.body;
 
     // Vérifier si le podcast existe
@@ -152,7 +152,6 @@ router.post("/episodes", upload.single("file"), async (req, res) => {
       title,
       description,
       release_date,
-      duration,
       file_path,
     });
 
@@ -172,7 +171,6 @@ router.patch("/episodes/:id", upload.single("file"), async (req, res) => {
       title,
       description,
       release_date,
-      duration,
       podcast_name,
     } = req.body;
 
@@ -225,7 +223,6 @@ router.patch("/episodes/:id", upload.single("file"), async (req, res) => {
       title: title,
       description: description,
       release_date: release_date,
-      duration: duration,
       file_path: filePath, // Utiliser le nouveau chemin du fichier MP3
     });
 

@@ -44,8 +44,8 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/callback', passport.authenticate('google'), (req, res) => {
-    const token = req.user.generateJwtToken();
-    res.json({ message: 'Connexion réussie', user: req.user, token });
+  const token = req.user.generateJwtToken();
+  res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`);
 });
 
 
