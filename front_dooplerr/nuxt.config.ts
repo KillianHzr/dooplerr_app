@@ -2,19 +2,22 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
-    ['@nuxtjs/google-fonts', {
-      families: {
-        'Jost': true,
-        download: true,
-        inject: true
-      }
-    }],
-    '@nuxtjs/tailwindcss',
+    [
+      "@nuxtjs/google-fonts",
+      {
+        families: {
+          Jost: true,
+          download: true,
+          inject: true,
+        },
+      },
+    ],
+    "@nuxtjs/tailwindcss",
   ],
-  css: ['~/assets/scss/main.scss'],
+  css: ["~/assets/scss/main.scss"],
   runtimeConfig: {
-    public:{
-      BASE_URL: process.env.BASE_URL, 
-    }
-  }
-})
+    public: {
+      BASE_URL: process.env.BASE_URL,
+    },
+  },
+});
