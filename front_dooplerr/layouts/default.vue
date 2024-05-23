@@ -1,17 +1,20 @@
 <template>
-  <!-- <NuxtPwaManifest /> -->
-  <div class="min-h-screen relative">
-    <!-- <TopMenu class=""/> -->
-    <div id="auth-container" style="position: fixed; z-index: 9999; margin: 20px; display: flex; align-items: center;">
-      <div id="auth-indicator"
-        style="width: 20px; height: 20px; border-radius: 100px; margin-right: 10px; background-color: red;"></div>
-      <button v-if="!isAuthenticated" style="margin-right: 10px;">
-        <NuxtLink to="/auth/login">Login</NuxtLink>
-      </button>
-      <button v-if="isAuthenticated" @click="logout">Logout</button>
+  <div>
+    <NuxtPwaManifest />
+    <div class="min-h-screen relative">
+      <!-- <TopMenu class=""/> -->
+      <div id="auth-container"
+        style="position: fixed; z-index: 9999; margin: 20px; display: flex; align-items: center;">
+        <div id="auth-indicator"
+          style="width: 20px; height: 20px; border-radius: 100px; margin-right: 10px; background-color: red;"></div>
+        <button v-if="!isAuthenticated" style="margin-right: 10px;">
+          <NuxtLink to="/auth/login">Login</NuxtLink>
+        </button>
+        <button v-if="isAuthenticated" @click="logout">Logout</button>
+      </div>
+      <slot />
+      <!-- <BottomMenu class="fixed bottom-0"/> -->
     </div>
-    <NuxtPage />
-    <!-- <BottomMenu class="fixed bottom-0"/> -->
   </div>
 </template>
 
