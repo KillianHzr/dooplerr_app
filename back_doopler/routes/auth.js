@@ -45,7 +45,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 
 router.get('/google/callback', passport.authenticate('google'), (req, res) => {
   const token = req.user.generateJwtToken();
-  res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`);
+  res.redirect(`${process.env.FRONTEND_URL}/auth/login?token=${token}`);
 });
 
 

@@ -7,7 +7,7 @@
           id="auth-indicator"
           style="width: 20px; height: 20px; border-radius: 100px; margin-right: 10px; background-color: red;"
         ></div>
-        <button v-if="!isAuthenticated" @click="goToLogin" style="margin-right: 10px;">Login</button>
+        <button v-if="!isAuthenticated" style="margin-right: 10px;"><NuxtLink to="/auth">Login</NuxtLink></button>
         <button v-if="isAuthenticated" @click="logout">Logout</button>
       </div>
       <NuxtPage />
@@ -41,7 +41,7 @@
     localStorage.removeItem('token');
     isAuthenticated.value = false;
     checkAuth();
-    router.push('/login');
+    router.push('/auth');
   };
   
   onMounted(() => {
