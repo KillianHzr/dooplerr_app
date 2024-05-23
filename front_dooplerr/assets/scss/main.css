@@ -1,0 +1,8 @@
+body {
+  background: rgb(6, 5, 17);
+  background: linear-gradient(90deg, rgb(6, 5, 17) 0%, rgb(16, 13, 39) 50%, rgb(6, 5, 17) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#060511",endColorstr="#060511",GradientType=1);
+}
+body h1, body h2, body h3, body h4, body h5, body h6 {
+  font-family: "Jost", sans-serif;
+}/*# sourceMappingURL=main.css.map */

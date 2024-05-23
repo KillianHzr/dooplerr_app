@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const usePodcasts = () => {
   const config = useRuntimeConfig();
-  const urlBase = "http://127.0.0.1:3306";
+  const urlBase = `${config.public.BASE_URL}`;
 
   async function getPodcasts() {
     try {

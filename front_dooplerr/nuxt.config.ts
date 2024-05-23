@@ -12,4 +12,9 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
   ],
   css: ['~/assets/scss/main.scss'],
+  runtimeConfig: {
+    public:{
+      BASE_URL: process.env.BASE_URL, 
+    }
+  }
 })
