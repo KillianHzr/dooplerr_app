@@ -28,7 +28,7 @@ export const usePodcasts = () => {
   async function addPodcast(formData: FormData) {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(`${urlBase}admin/podcasts`, formData, {
+      const response = await axios.post(`${urlBase}/admin/podcasts`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
