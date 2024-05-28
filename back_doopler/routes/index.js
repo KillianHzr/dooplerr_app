@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Op } = require("sequelize");
-const { Episode, Podcast, Comment, Category } = require("../models/index");
+const { Episode, Podcast, Comment, Category, User } = require("../models/index");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -32,7 +32,13 @@ router.get("/episodes", async (req, res) => {
 
 router.get("/episodes/:id", async (req, res) => {
   const episode = await Episode.findByPk(req.params.id, {
-    include: [Podcast, Comment],
+    // Get podcast and comments for each episode with user
+    include: [Podcast, 
+      {
+        model: Comment,
+        include: User,
+      },
+    ],
   });
   res.json(episode);
 });
