@@ -68,7 +68,7 @@
 
                     <div class="flex flex-col gap-2 pt-1">
                         <div class="flex gap-2 items-baseline">
-                            <h3 class="text-white font-semibold">User 1</h3>
+                            <h3 class="text-white font-semibold">{{comment.Users[0].username}}</h3>
                             <span class="text-gray-400 text-sm">{{ formatDate(comment.date) }}</span>
                         </div>
                         <p class="text-white">{{ comment.text }}</p>
