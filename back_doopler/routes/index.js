@@ -36,8 +36,13 @@ router.get("/episodes/:id", async (req, res) => {
     include: [Podcast, 
       {
         model: Comment,
-        include: User,
-      },
+        include: [
+          {
+            model: User,
+            attributes: ['username']
+          }
+        ]
+      }
     ],
   });
   res.json(episode);
