@@ -36,32 +36,21 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const isAuthenticated = ref(false);
+const router = useRouter();
 
 const checkAuth = () => {
   const token = localStorage.getItem('token');
   isAuthenticated.value = !!token;
   const indicator = document.querySelector('#auth-indicator');
-
   if (indicator) {
     indicator.style.backgroundColor = token ? 'green' : 'red';
   }
-
-  if (!isAuthenticated.value) {
-    return navigateTo('auth');
-  }
-};
-
-const router = useRouter();
-
-const goToLogin = () => {
-  router.push('/login');
 };
 
 const logout = () => {
   localStorage.removeItem('token');
   isAuthenticated.value = false;
-  checkAuth();
-  router.push('/auth/login');
+  router.push('/auth');
 };
 
 onMounted(() => {
@@ -70,6 +59,9 @@ onMounted(() => {
   router.beforeEach((to, from, next) => {
     if (process.client) {
       checkAuth();
+      if (!isAuthenticated.value && to.path !== '/auth' && to.path !== '/auth/login' && to.path !== '/auth/register') {
+        return next('/auth');
+      }
     }
     next();
   });
