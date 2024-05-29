@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <HeroBanner />
-    <div class="container mx-auto px-8">
+  <div class="px-5">
+    <TopNav />
+    <div class="container mx-auto">
       <h2 class="text-3xl font-bold text-white mb-10">
         Les derniers podcasts
       </h2>
@@ -31,7 +31,6 @@ const { getEpisodes } = useEpisodes();
 
 const podcasts = ref([]);
 const episodes = ref([]);
-
 
 onMounted(async () => {
   podcasts.value = await getPodcasts();

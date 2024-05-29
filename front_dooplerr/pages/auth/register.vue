@@ -1,102 +1,104 @@
 <template>
-  <div class="min-h-screenflex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-white">Créer votre compte</h2>
-      <p class="mt-2 text-center text-sm text-gray-600 max-w">
+  <div :class="`min-h-screen flex flex-col justify-center text-white`">
+    <div class="py-12 px-5">
+      <h2 class="text-2xl italic">Créer ton compte Dooplerr</h2>
+      <p class="mt-2 text-gray-400 max-w">
         Ou
-        <nuxt-link to="/auth/login" class="font-medium text-blue-600 hover:text-blue-500">
-          connectez-vous à votre compte
-        </nuxt-link>
+        <NuxtLink to="/auth/login" class="font-medium text-indigo-400 hover:text-indigo-500">
+          connecte-toi à ton compte
+        </NuxtLink>
       </p>
     </div>
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <form class="space-y-6" @submit.prevent="register">
-          <div>
-            <label for="username" class="block text-sm font-medium text-gray-700">Nom d'utilisateur</label>
-            <div class="mt-1">
-              <input id="username" name="username" type="text" v-model="username" required
-                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Entrez votre nom d'utilisateur">
-            </div>
-          </div>
-          <div>
-            <label for="firstname" class="block text-sm font-medium text-gray-700">Prénom</label>
-            <div class="mt-1">
-              <input id="firstname" name="firstname" type="text" v-model="firstname" required
-                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Entrez votre prénom">
-            </div>
-          </div>
-          <div>
-            <label for="lastname" class="block text-sm font-medium text-gray-700">Nom de famille</label>
-            <div class="mt-1">
-              <input id="lastname" name="lastname" type="text" v-model="lastname" required
-                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Entrez votre nom de famille">
-            </div>
-          </div>
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Adresse e-mail</label>
-            <div class="mt-1">
-              <input id="email" name="email" type="email" v-model="email" required
-                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Entrez votre adresse e-mail">
-            </div>
-          </div>
-          <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
-            <div class="mt-1">
-              <input id="password" name="password" type="password" v-model="password" required
-                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Entrez votre mot de passe">
-            </div>
-          </div>
-          <div>
-            <button type="submit"
-              class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              Créer un compte
-            </button>
-          </div>
-        </form>
-        <div class="mt-6">
-          <div class="relative">
-            <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-gray-300"></div>
-            </div>
-            <div class="relative flex justify-center text-sm">
-              <span class="px-2 bg-gray-100 text-gray-500">Ou continuez avec</span>
-            </div>
-          </div>
-          <div class="mt-6 grid grid-cols-1 gap-3">
-            <div>
-              <button @click="registerWithGoogle"
-                class="w-full flex items-center justify-center px-8 py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                <img class="h-6 w-6" src="https://www.svgrepo.com/show/506498/google.svg" alt="Google">
-              </button>
-            </div>
-          </div>
+
+    <form class="text-sm italic" @submit.prevent="validateAndRegister">
+      <div :class="`flex flex-col gap-6 px-5 py-16 border-dooplerr-${borderColor} border-t`">
+        <div class="flex items-center">
+          <label for="username" class="w-1/3 font-medium">Indentifiant</label>
+          <input id="username" name="username" type="text" v-model="username" required
+            class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+            placeholder="Entrez votre nom d'utilisateur">
+        </div>
+        <div class="flex items-center">
+          <label for="password" class="w-1/3 font-medium">Mot de passe</label>
+          <input id="password" name="password" type="password" v-model="password" required
+            class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+            placeholder="Entrez votre mot de passe">
+        </div>
+        <div class="flex items-center">
+          <label for="confirmPassword" class="w-1/3 font-medium">Confirmation de mot de passe</label>
+          <input id="confirmPassword" name="confirmPassword" type="password" v-model="confirmPassword" required
+            class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+            placeholder="Confirmez votre mot de passe">
+        </div>
+        <p v-if="error" class="text-red-500">{{ error }}</p>
+      </div>
+      <div :class="`flex flex-col gap-6 px-5 py-16 border-dooplerr-${borderColor} border-t`">
+        <div class="flex items-center">
+          <label for="email" class="w-1/3 font-medium">Adresse e-mail</label>
+          <input id="email" name="email" type="email" v-model="email" required
+            class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+            placeholder="Entrez votre adresse e-mail">
+        </div>
+        <div class="flex items-center">
+          <label for="firstname" class="w-1/3 font-medium">Prénom</label>
+          <input id="firstname" name="firstname" type="text" v-model="firstname" required
+            class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+            placeholder="Entrez votre prénom">
+        </div>
+        <div class="flex items-center">
+          <label for="lastname" class="w-1/3 font-medium">Nom de famille</label>
+          <input id="lastname" name="lastname" type="text" v-model="lastname" required
+            class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+            placeholder="Entrez votre nom de famille">
         </div>
       </div>
-    </div>
+      <div :class="`flex flex-col gap-6 px-5 py-8 border-dooplerr-${borderColor} border-t`">
+        <button type="submit"
+          :class="`w-full py-2 px-4 border border-transparent font-medium rounded-md text-white bg-dooplerr-${color} uppercase text-lg`">
+          Créer mon compte gratuit
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 import axios from 'axios';
+
+definePageMeta({
+  layout: false,
+});
 
 const username = ref('');
 const firstname = ref('');
 const lastname = ref('');
 const email = ref('');
 const password = ref('');
+const confirmPassword = ref('');
 const error = ref('');
 
+const router = useRouter();
 const config = useRuntimeConfig();
 const urlBase = `${config.public.BASE_URL}`;
 
-const register = async () => {
+const route = useRoute();
+const colorMap = {
+  free: 'yellow',
+  student: 'purple-light',
+  duo: 'blue',
+  family: 'red'
+};
+const color = colorMap[route.query.plan] || 'yellow';
+const borderColor = colorMap[route.query.plan] || 'dooplerr-yellow';
+
+const validateAndRegister = async () => {
+  if (password.value !== confirmPassword.value) {
+    error.value = 'Les mots de passe ne correspondent pas';
+    return;
+  }
+
   try {
     const response = await axios.post(`${urlBase}/auth/register`, {
       username: username.value,
@@ -116,11 +118,25 @@ const register = async () => {
 const registerWithGoogle = () => {
   window.location.href = `${urlBase}/auth/google`;
 };
+
+const isAuthenticated = ref(false);
+
+const checkAuth = () => {
+  const token = localStorage.getItem('token');
+  isAuthenticated.value = !!token;
+
+  if (isAuthenticated.value) {
+    router.push('/');
+  }
+};
+
+onMounted(() => {
+  checkAuth();
+});
 </script>
 
 <style scoped>
-.error {
-  color: red;
-  margin-top: 10px;
+input:focus{
+    box-shadow: none !important;
 }
 </style>

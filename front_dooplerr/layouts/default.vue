@@ -2,9 +2,8 @@
   <div>
     <NuxtPwaManifest />
     <div class="min-h-screen relative">
-      <!-- <TopMenu class=""/> -->
       <div id="auth-container"
-        style="position: fixed; z-index: 9999; margin: 20px; display: flex; align-items: center;">
+        style="position: fixed; z-index: 9999; display: flex; align-items: center; width: 100%; justify-content: center">
         <div id="auth-indicator"
           style="width: 20px; height: 20px; border-radius: 100px; margin-right: 10px; background-color: red;"></div>
         <button v-if="!isAuthenticated" style="margin-right: 10px;">
@@ -12,8 +11,22 @@
         </button>
         <button v-if="isAuthenticated" @click="logout">Logout</button>
       </div>
-      <slot />
-      <!-- <BottomMenu class="fixed bottom-0"/> -->
+
+      <section class="pb-1">
+        <slot />
+      </section>
+
+      <section class="w-full fixed py-2 px-8 bg-dooplerr-black bottom-0 left-0 flex justify-between">
+        <NuxtLink to="/" active-class="active-link">
+          <Icon name="material-symbols:home-outline-rounded" size="38" />
+        </NuxtLink>
+        <NuxtLink to="/podcasts" active-class="active-link">
+          <Icon name="mingcute:search-line" size="38" />
+        </NuxtLink>
+        <NuxtLink to="/playlists" active-class="active-link">
+          <Icon name="solar:layers-minimalistic-linear" size="38" />
+        </NuxtLink>
+      </section>
     </div>
   </div>
 </template>
@@ -31,6 +44,10 @@ const checkAuth = () => {
 
   if (indicator) {
     indicator.style.backgroundColor = token ? 'green' : 'red';
+  }
+
+  if (!isAuthenticated.value) {
+    return navigateTo('auth/login');
   }
 };
 
@@ -71,5 +88,13 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.icon{
+  color: white;
+}
+
+.active-link .icon {
+  color: #BFBCFF;
 }
 </style>
