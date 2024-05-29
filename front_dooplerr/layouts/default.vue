@@ -47,7 +47,7 @@ const checkAuth = () => {
   }
 
   if (!isAuthenticated.value) {
-    return navigateTo('auth/login');
+    return navigateTo('auth');
   }
 };
 
