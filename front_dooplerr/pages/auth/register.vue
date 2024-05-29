@@ -1,6 +1,6 @@
 <template>
   <div :class="`min-h-screen flex flex-col justify-center text-white`">
-    <div v-if="!planSelected" class="px-5">
+    <div v-if="!planSelected" class="py-12 px-5">
       <div class="flex flex-col gap-4">
         <div class="border border-dooplerr-yellow rounded-xl p-4">
           <div class="flex justify-between font-medium italic">
