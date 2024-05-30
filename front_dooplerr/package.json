@@ -1,26 +1,26 @@
 {
-  "name": "front_dooplerr",
-  "version": "0.0.0",
+  "name": "nuxt-app",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "vue": "^3.4.15",
-    "vue-router": "^4.2.5"
+    "@nuxtjs/tailwindcss": "^6.12.0",
+    "@vite-pwa/nuxt": "^0.7.0",
+    "axios": "^1.6.8",
+    "flowbite": "^2.3.0",
+    "nuxt": "^3.11.2",
+    "sass": "^1.75.0",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.3.3",
-    "@vitejs/plugin-vue": "^5.0.3",
-    "@vue/eslint-config-prettier": "^8.0.0",
-    "eslint": "^8.49.0",
-    "eslint-plugin-vue": "^9.17.0",
-    "prettier": "^3.0.3",
-    "vite": "^5.0.11"
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "nuxt-icon": "^0.6.10"
   }
 }

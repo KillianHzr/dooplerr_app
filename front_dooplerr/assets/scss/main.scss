@@ -1,0 +1,58 @@
+$dooplerr-colors: (
+  'black': #060511,
+  'grey': #242330,
+  'grey-purple': #706D92,
+  'purple-light': #C4B1D4,
+  'yellow': #FFC863,
+  'blue': #A5BCD1,
+  'red': #C55353
+);
+
+@mixin generate-classes($title, $property, $important: false) {
+  @each $name, $color in $dooplerr-colors {
+    .#{$title}-dooplerr-#{$name} {
+      #{$property}: $color;
+      @if $important {
+        #{$property}: $color !important;
+      }
+    }
+  }
+}
+
+@include generate-classes('bg', 'background-color', true);
+@include generate-classes('text', 'color', true);
+@include generate-classes('border', 'border-color', true);
+
+.rounded-dooplerr {
+  border-radius: 4px;
+}
+
+
+
+body{
+    background: rgb(6,5,17);
+    background: -moz-linear-gradient(90deg, rgba(6,5,17,1) 0%, rgba(16,13,39,1) 50%, rgba(6,5,17,1) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(6,5,17,1) 0%, rgba(16,13,39,1) 50%, rgba(6,5,17,1) 100%);
+    background: linear-gradient(90deg, rgba(6,5,17,1) 0%, rgba(16,13,39,1) 50%, rgba(6,5,17,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#060511",endColorstr="#060511",GradientType=1);
+
+    h1, h2, h3, h4, h5, h6{
+        font-family: 'Jost', sans-serif;
+    }
+}
+
+.list-content .arrow{
+    display: none;
+    visibility: hidden;
+}
+
+@media screen and (max-width: 768px) {
+    .arrow{
+        display: none;
+        visibility: hidden;
+    }
+
+    .wrapper-container::after{
+        display: none;
+    }
+}
