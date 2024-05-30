@@ -40,7 +40,7 @@ router.get("/episodes/:id", async (req, res) => {
         include: [
           {
             model: User,
-            attributes: ['username']
+            attributes: ['username', 'image_path']
           }
         ]
       }

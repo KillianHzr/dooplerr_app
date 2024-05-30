@@ -54,9 +54,14 @@
       <div v-for="comment in episode.Comments" :key="comment.id" class="mb-4">
         <div class="flex gap-2 items-start">
           <div class="flex items-center gap-3">
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="18" cy="18" r="18" fill="#8953C5" />
-            </svg>
+            <div v-if="comment.Users && comment.Users.length > 0 && comment.Users[0].image_path">
+              <img :src="comment.Users[0].image_path" alt="Avatar" height="36" width="36" class="rounded-full bg-white">
+            </div>
+            <div v-else>
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="18" :fill="randomColor" />
+              </svg>
+            </div>
           </div>
 
           <div class="flex flex-col gap-2 pt-1">
@@ -172,6 +177,16 @@ const submitComment = async () => {
     console.error("Error adding comment:", error);
   }
 };
+
+// Générer une couleur aléatoire
+const randomColor = computed(() => {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+});
 </script>
 
 <style scoped>
