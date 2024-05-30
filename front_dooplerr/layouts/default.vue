@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 
 const isAuthenticated = ref(false);
@@ -55,16 +55,22 @@ const logout = () => {
 
 onMounted(() => {
   checkAuth();
+});
 
-  router.beforeEach((to, from, next) => {
-    if (process.client) {
-      checkAuth();
-      if (!isAuthenticated.value && to.path !== '/auth' && to.path !== '/auth/login' && to.path !== '/auth/register') {
-        return next('/auth');
-      }
-    }
+onBeforeMount(() => {
+  checkAuth();
+  if (!isAuthenticated.value && window.location.pathname !== '/auth' && window.location.pathname !== '/auth/login' && window.location.pathname !== '/auth/register') {
+    router.push('/auth');
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  checkAuth();
+  if (!isAuthenticated.value && to.path !== '/auth' && to.path !== '/auth/login' && to.path !== '/auth/register') {
+    next('/auth');
+  } else {
     next();
-  });
+  }
 });
 </script>
 
@@ -82,7 +88,7 @@ button:hover {
   background-color: #0056b3;
 }
 
-.icon{
+.icon {
   color: white;
 }
 
