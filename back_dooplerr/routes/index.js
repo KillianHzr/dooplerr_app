@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { Op } = require("sequelize");
-const { Episode, Podcast, Comment, Category, User } = require("../models/index");
+const { Episode, Podcast, Comment, Category, User, UserComment, EpisodeComment } = require("../models/index");
+const { authentificationMiddleware } = require("../middlewares/authentification");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -66,28 +67,40 @@ router.get("/episodes/:id/comments", async (req, res) => {
 });
 
 // Ajouter un commentaire à un épisode
-router.post("/episodes/:id/comments", async (req, res) => {
+router.post("/episodes/:id/comments", authentificationMiddleware, async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Aucun utilisateur n'est connecté." });
+  }
+
   try {
-    const { text, date } = req.body;
+    const { text } = req.body;
+    const date = new Date();
     const episode = await Episode.findByPk(req.params.id);
 
     if (!episode) {
-      return res
-        .status(404)
-        .json({ error: "L'épisode spécifié n'existe pas." });
+      return res.status(404).json({ error: "L'épisode spécifié n'existe pas." });
     }
 
-    const comment = await episode.createComment({
+    const comment = await Comment.create({
       text: text,
       date: date,
+      EpisodeId: episode.id,
+    });
+
+    await UserComment.create({
+      UserId: req.user.id,
+      CommentId: comment.id
+    });
+
+    await EpisodeComment.create({
+      EpisodeId: episode.id,
+      CommentId: comment.id
     });
 
     res.json(comment);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "Erreur lors de la création du commentaire." });
+    res.status(500).json({ error: "Erreur lors de la création du commentaire." });
   }
 });
 
