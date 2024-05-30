@@ -32,15 +32,35 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount } from 'vue';
+import { ref, onMounted, onBeforeMount, provide } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const isAuthenticated = ref(false);
-const router = useRouter();
+const user = ref({});
 
-const checkAuth = () => {
+provide('user', user);
+
+const router = useRouter();
+const config = useRuntimeConfig();
+const urlBase = `${config.public.BASE_URL}`;
+
+const checkAuth = async () => {
   const token = localStorage.getItem('token');
   isAuthenticated.value = !!token;
+  if (token) {
+    try {
+      const response = await axios.get(`${urlBase}/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      user.value = response.data;
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+      logout();
+    }
+  }
   const indicator = document.querySelector('#auth-indicator');
   if (indicator) {
     indicator.style.backgroundColor = token ? 'green' : 'red';
@@ -50,6 +70,7 @@ const checkAuth = () => {
 const logout = () => {
   localStorage.removeItem('token');
   isAuthenticated.value = false;
+  user.value = {};
   router.push('/auth');
 };
 

@@ -91,6 +91,27 @@ router.post("/episodes/:id/comments", async (req, res) => {
   }
 });
 
+router.get("/users/:id/podcasts", async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id, {
+      include: {
+        model: Podcast,
+        include: [Episode, Category],
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(user.Podcasts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching user's podcasts" });
+  }
+});
+
+
 // Route pour obtenir les catégories
 router.get("/categories", async (req, res) => {
   try {

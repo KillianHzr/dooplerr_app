@@ -2,74 +2,45 @@
   <div :class="`min-h-screen flex flex-col justify-center text-white`">
     <div v-if="!planSelected" class="py-12 px-5">
       <div class="flex flex-col gap-4">
-        <div class="border border-dooplerr-yellow rounded-xl p-4">
-          <div class="flex justify-between font-medium italic">
-            <h3 class="font-semibold italic text-lg">Bon plan</h3>
-            <div class="flex flex-col text-center">
-              <span class="text-sm">Gratuit</span>
-              <span class="text-sm">‎</span>
-            </div>
-          </div>
-          <ul class="font-light list-disc ps-6 text-xs pb-3">
-            <li><span class="text-base">1 compte vérifié</span></li>
-            <li><span class="text-base">Accès à tous les pdocasts</span></li>
-            <li><span class="text-base">Pubs visuels sur la plateforme</span></li>
-            <li><span class="text-base">Annulez à tout moment</span></li>
-          </ul>
-          <div class="w-full flex justify-center">
-            <button @click="selectPlan('free')" class="pb-1 w-56 bg-dooplerr-yellow text-white rounded-full text-sm font-medium italic">Obtenez Bon plan</button>
-          </div>
-        </div>
-        <div class="border border-dooplerr-purple-light rounded-xl p-4">
-          <div class="flex justify-between font-medium italic">
-            <h3 class="font-semibold italic text-lg">Premium Étudiant</h3>
-            <div class="flex flex-col text-center">
-              <span class="text-sm">5,99 €</span>
-              <span class="text-xs opacity-50">par mois</span>
-            </div>
-          </div>
-          <ul class="font-light list-disc ps-6 text-xs pb-3">
-            <li><span class="text-base">1 compte premium vérifié</span></li>
-            <li><span class="text-base">Réduction pour les étudiantes et étudiantes éligibles</span></li>
-            <li><span class="text-base">Annulez à tout moment</span></li>
-          </ul>
-          <div class="w-full flex justify-center">
-            <button @click="selectPlan('student')" class="pb-1 w-56 bg-dooplerr-purple-light text-white rounded-full text-sm font-medium italic">Obtenez Premium Étudiant</button>
-          </div>
-        </div>
-        <div class="border border-dooplerr-blue rounded-xl p-4">
-          <div class="flex justify-between font-medium italic">
-            <h3 class="font-semibold italic text-lg">Premium Duo</h3>
-            <div class="flex flex-col text-center">
-              <span class="text-sm">14,99 €</span>
-              <span class="text-xs opacity-50">par mois</span>
-            </div>
-          </div>
-          <ul class="font-light list-disc ps-6 text-xs pb-3">
-            <li><span class="text-base">2 comptes premium vérifié</span></li>
-            <li><span class="text-base">Annulez à tout moment</span></li>
-          </ul>
-          <div class="w-full flex justify-center">
-            <button @click="selectPlan('duo')" class="pb-1 w-56 bg-dooplerr-blue text-white rounded-full text-sm font-medium italic">Obtenez Premium Duo</button>
-          </div>
-        </div>
-        <div class="border border-dooplerr-red rounded-xl p-4">
-          <div class="flex justify-between font-medium italic">
-            <h3 class="font-semibold italic text-lg">Premium Famille</h3>
-            <div class="flex flex-col text-center">
-              <span class="text-sm">17,99 €</span>
-              <span class="text-xs opacity-50">par mois</span>
-            </div>
-          </div>
-          <ul class="font-light list-disc ps-6 text-xs pb-3">
-            <li><span class="text-base">Jusqu'à 6 compte vérifié</span></li>
-            <li><span class="text-base">Gérer les contenus sensibles ou explicites</span></li>
-            <li><span class="text-base">Annulez à tout moment</span></li>
-          </ul>
-          <div class="w-full flex justify-center">
-            <button @click="selectPlan('family')" class="pb-1 w-56 bg-dooplerr-red text-white rounded-full text-sm font-medium italic">Obtenez Premium Famille</button>
-          </div>
-        </div>
+        <PlanCard 
+          planName="Bon plan" 
+          price="Gratuit" 
+          :features="['1 compte vérifié', 'Accès à tous les podcasts', 'Pubs visuels sur la plateforme', 'Annulez à tout moment']" 
+          planType="free" 
+          borderColor="dooplerr-yellow" 
+          buttonText="Obtenez Bon plan"
+          @selectPlan="selectPlan"
+        />
+        <PlanCard 
+          planName="Premium Étudiant" 
+          price="5,99 €" 
+          subtext="par mois" 
+          :features="['1 compte premium vérifié', 'Réduction pour les étudiantes et étudiants éligibles', 'Annulez à tout moment']" 
+          planType="student" 
+          borderColor="dooplerr-purple-light" 
+          buttonText="Obtenez Premium Étudiant"
+          @selectPlan="selectPlan"
+        />
+        <PlanCard 
+          planName="Premium Duo" 
+          price="14,99 €" 
+          subtext="par mois" 
+          :features="['2 comptes premium vérifiés', 'Annulez à tout moment']" 
+          planType="duo" 
+          borderColor="dooplerr-blue" 
+          buttonText="Obtenez Premium Duo"
+          @selectPlan="selectPlan"
+        />
+        <PlanCard 
+          planName="Premium Famille" 
+          price="17,99 €" 
+          subtext="par mois" 
+          :features="['Jusqu\'à 6 comptes vérifiés', 'Gérer les contenus sensibles ou explicites', 'Annulez à tout moment']" 
+          planType="family" 
+          borderColor="dooplerr-red" 
+          buttonText="Obtenez Premium Famille"
+          @selectPlan="selectPlan"
+        />
       </div>
     </div>
     
@@ -148,6 +119,7 @@
 </template>
 
 <script setup>
+import PlanCard from '@/components/PlanCard.vue';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
@@ -235,7 +207,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-input:focus{
-    box-shadow: none !important;
+input:focus {
+  box-shadow: none !important;
 }
 </style>

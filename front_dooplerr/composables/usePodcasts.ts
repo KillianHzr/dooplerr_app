@@ -24,7 +24,16 @@ export const usePodcasts = () => {
     }
   }
 
-  // Ajout d'un podcast avec le user connecté
+  async function getUserPodcasts(userId: string) {
+    try {
+      const response = await axios.get(`${urlBase}/users/${userId}/podcasts`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user podcasts:", error);
+      throw error;
+    }
+  }
+
   async function addPodcast(formData: FormData) {
     try {
       const token = localStorage.getItem("token");
@@ -44,6 +53,7 @@ export const usePodcasts = () => {
   return {
     getPodcasts,
     getPodcastEpisodes,
+    getUserPodcasts,
     addPodcast,
   };
 };

@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const User = require('../models/User');
 const { Op } = require('sequelize');
+const { authentificationMiddleware } = require("../middlewares/authentification");
 
 // Route pour l'inscription
 router.post("/register", async (req, res) => {
@@ -35,7 +36,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Routep pour la connexion
+// Route pour la connexion
 router.post('/login', passport.authenticate('local'), (req, res) => {
     const token = req.user.generateJwtToken();
     res.json({ message: 'Connexion réussie', user: req.user, token });
@@ -48,6 +49,21 @@ router.get('/google/callback', passport.authenticate('google'), (req, res) => {
   res.redirect(`${process.env.FRONTEND_URL}/auth/login?token=${token}`);
 });
 
+// Route pour obtenir les informations de l'utilisateur connecté
+router.get('/me', authentificationMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] }
+    });
+    if (!user) {
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erreur lors de la récupération des informations de l'utilisateur." });
+  }
+});
 
 // Route pour la déconnexion
 router.get("/logout", function (req, res) {
