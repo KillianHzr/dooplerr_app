@@ -9,6 +9,19 @@
     </section>
 
     <div v-else class="container mx-auto">
+      <h2 class="text-xl uppercase font-bold text-white mb-4 italic">
+        Mes émissions
+      </h2>
+        <Wrapper display="carrousel">
+          <CardPodcast v-for="podcast in podcasts" :key="podcast.id" :podcast="podcast"
+            class="group relative aspect-square min-w-[120px] cursor-pointer overflow-hidden rounded-xl snap-start">
+          </CardPodcast>
+        </Wrapper>
+      </div>
+
+      <h2 class="text-xl uppercase font-bold text-white mb-4 italic">
+        Pour toi
+      </h2>
       <div class="grid grid-cols-2 gap-6 pb-10">
         <NuxtLink :to="`${section.link}`" v-for="section in sections" :key="section.title" :style="{ backgroundColor: section.color }" class="px-2 py-1 flex flex-col text-white rounded-xl relative">
           <h3 class="text-xl font-medium italic pb-12">{{ section.title }}</h3>
@@ -31,16 +44,6 @@
         </div>
         <img :src="mostListenedPodcast.thumbnail_path" class="rounded-lg bg-gray-300 ml-auto" width="90" height="90" style="min-width: 90px; min-height: 90px; max-height: 90px; max-width: 90px; object-fit: cover;" />
       </NuxtLink>
-
-      <h2 class="text-xl uppercase font-bold text-white mb-4 italic">
-        Mes émissions
-      </h2>        
-        <Wrapper display="carrousel">
-          <CardPodcast v-for="podcast in podcasts" :key="podcast.id" :podcast="podcast"
-            class="group relative aspect-square min-w-[100px] cursor-pointer overflow-hidden rounded-xl snap-start">
-          </CardPodcast>
-        </Wrapper>
-    </div>
   </div>
 </template>
 
