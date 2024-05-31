@@ -95,6 +95,9 @@ useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk ? `${titleChunk} - Dooplerr - La plateforme de podcast interactive` : "Dooplerr - La plateforme de podcast interactive";
   },
+  htmlAttrs: {
+    lang: "fr",
+  },
 })
 
 </script>
