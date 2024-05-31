@@ -4,7 +4,6 @@ export const useCategories = () => {
   const config = useRuntimeConfig();
   const urlBase = `${config.public.BASE_URL}`;
 
-  // Récupérer les catégories
   async function getCategories() {
     try {
       const response = await axios.get(`${urlBase}/categories`);
@@ -15,7 +14,6 @@ export const useCategories = () => {
     }
   }
 
-  // Récupérer les podcasts d'une catégorie
   async function getCategoryPodcasts(categoryId: string) {
     try {
       const response = await axios.get(`${urlBase}/categories/${categoryId}/podcasts`);

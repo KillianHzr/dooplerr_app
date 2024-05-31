@@ -1,10 +1,7 @@
 <template>
   <div>
-    <!-- Titre de la section Modifier le podcast -->
     <h2 class="text-white text-2xl font-semibold mb-4 italic">Modifier le podcast</h2>
-    <!-- Formulaire de modification du podcast -->
     <form @submit.prevent="handleUpdatePodcast" class="flex flex-col gap-2">
-      <!-- Champ de saisie du titre -->
       <div class="mb-4 border border-white rounded-xl p-2 px-4">
         <label class="block text-white font-medium text-lg" for="title">Titre <span class="text-sm font-normal">(obligatoire)</span></label>
         <input
@@ -13,7 +10,6 @@
           placeholder="Votre titre"
           style="box-shadow: none;">
       </div>
-      <!-- Champ de saisie de la description -->
       <div class="mb-4 border border-white rounded-xl p-2 px-4">
         <label class="block text-white font-medium text-lg" for="description">Description <span class="text-sm font-normal">(obligatoire)</span></label>
         <textarea
@@ -23,7 +19,6 @@
       </div>
       <div class="flex">
         <div class="flex flex-col mr-8">
-          <!-- Sélecteur de catégorie -->
           <div class="mb-4">
             <label class="block text-white font-medium text-lg" for="category">Catégorie</label>
             <select
@@ -34,7 +29,6 @@
               <option v-for="category in categories" :key="category.id" :value="category.name">{{ category.name }}</option>
             </select>
           </div>
-          <!-- Sélecteur public/privé -->
           <div class="mb-4">
             <label class="block text-white font-medium text-lg" for="public">Public</label>
             <select
@@ -46,7 +40,6 @@
             </select>
           </div>
         </div>
-        <!-- Zone de téléchargement de la miniature -->
         <div class="ml-auto">
           <div @click="triggerFileInput" :style="thumbnailStyle" class="border-dashed-custom bg-transparent rounded-xl w-full text-white font-medium text-lg text-center cursor-pointer aspect-square flex justify-center items-center flex-col" style="width: 160px; height: 160px;">
             Miniature
@@ -60,7 +53,6 @@
             @change="handleFileChange">
         </div>
       </div>
-      <!-- Bouton de soumission et messages d'erreur ou de succès -->
       <div class="flex items-center justify-center w-full flex-col gap-3">
         <button
           class="border-white border text-white font-medium py-2 mt-6 px-10 rounded-xl focus:outline-none focus:shadow-outline"
@@ -77,15 +69,11 @@ import { ref, onMounted, computed } from 'vue';
 import { usePodcasts } from '~/composables/usePodcasts';
 import { useCategories } from '~/composables/useCategories';
 
-// Fonction pour mettre à jour le podcast
 const { updatePodcast } = usePodcasts();
-// Fonction pour obtenir les catégories
 const { getCategories } = useCategories();
 
-// Définition des props pour obtenir les détails du podcast
 const props = defineProps(['podcast']);
 
-// Initialisation des variables réactives avec les données du podcast
 const title = ref(props.podcast.title);
 const description = ref(props.podcast.description);
 const selectedCategory = ref(props.podcast.category_name || '');
@@ -96,10 +84,8 @@ const success = ref('');
 const categories = ref([]);
 const thumbnailURL = ref(props.podcast.thumbnail_path);
 
-// Référence pour l'élément input de fichier
 const fileInput = ref(null);
 
-// Fonction pour gérer le changement de fichier
 const handleFileChange = (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -112,17 +98,14 @@ const handleFileChange = (event) => {
   }
 };
 
-// Fonction pour déclencher l'input de fichier
 const triggerFileInput = () => {
   fileInput.value.click();
 };
 
-// Style de la miniature basée sur l'URL de la miniature téléchargée
 const thumbnailStyle = computed(() => {
   return thumbnailURL.value ? { backgroundImage: `url(${thumbnailURL.value})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {};
 });
 
-// Fonction pour soumettre les modifications du podcast
 const handleUpdatePodcast = async () => {
   error.value = '';
   success.value = '';
@@ -155,7 +138,6 @@ const handleUpdatePodcast = async () => {
   }
 };
 
-// Chargement des catégories au montage du composant
 onMounted(async () => {
   try {
     categories.value = await getCategories();
@@ -166,7 +148,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-  /* Styles pour les options de sélection */
   select option {
       color: white;
       background-color: #0D0B21;
@@ -178,7 +159,6 @@ onMounted(async () => {
       color: black;
   }
 
-  /* Style personnalisé pour les bordures en pointillés */
   .border-dashed-custom {
       border: 2px dashed white;
   }

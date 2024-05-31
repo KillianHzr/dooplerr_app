@@ -1,33 +1,27 @@
 <template>
   <div class="text-white">
-    <!-- Section de navigation avec bouton de retour et options de modification/déconnexion -->
     <section class="w-full py-10 flex flex-col px-5">
       <div class="flex justify-between">
         <button @click="$router.back()">
           <Icon name="material-symbols-light:arrow-back-ios-rounded" size="27" />
         </button>
         <div class="flex gap-5 items-center justify-center">
-          <button v-if="isAuthenticated" @click="logout" class="flex items-center justify-center border border-dooplerr-grey-purple rounded-full text-xs py-1 px-4">
-            <Icon name="material-symbols:logout-rounded" size="20" />
-          </button>
+          <button v-if="isAuthenticated" @click="logout" class="flex items-center justify-center border border-dooplerr-grey-purple rounded-full text-xs py-1 px-4"><Icon name="material-symbols:logout-rounded" size="20" /></button>
           <button class="border border-dooplerr-grey-purple rounded-full text-xs py-1 px-10 italic">Modifier</button>
         </div>
       </div>
     </section>
 
-    <!-- Notification de succès pour l'ajout de podcast -->
     <div v-if="showSuccessAlert" class="fixed top-0 left-0 right-0 bg-green-500 text-white text-center py-2 z-50 m-5">
       Podcast ajouté avec succès
     </div>
 
-    <!-- Section de chargement avec un spinner -->
     <section v-if="isLoading" class="flex justify-center items-center py-10">
       <div class="spinner-border text-dooplerr-grey-purple" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </section>
 
-    <!-- Profil utilisateur avec image et statistiques -->
     <section v-else>
       <div class="px-5 flex">
         <img :src="user.image_path" class="rounded-full bg-gray-300 me-8 border-dooplerr-grey-purple border" width="90" height="90" style="min-width: 90px; min-height: 90px; max-height: 90px; max-width: 90px; object-fit: cover;" />
@@ -44,7 +38,6 @@
       </div>
     </section>
 
-    <!-- Liste des podcasts de l'utilisateur -->
     <section v-if="!isLoading && userPodcasts.length">
       <div class="px-5 font-medium">
         <div class="flex justify-between w-full">
@@ -71,7 +64,6 @@
       </div>
     </section>
 
-    <!-- Message affiché lorsqu'il n'y a aucun podcast -->
     <section v-else-if="!isLoading">
       <div class="px-5 font-medium">
         <h2 class="text-2xl italic pt-10 pb-6 font-medium">Mes podcasts</h2>
@@ -85,10 +77,10 @@
       </div>
     </section>
 
-    <!-- Modale pour ajouter un podcast -->
     <Modal v-if="showAddPodcastModal" @close="showAddPodcastModal = false">
       <AddPodcastForm @close="showAddPodcastModal = false" />
     </Modal>
+
   </div>
 </template>
 
@@ -101,17 +93,13 @@ import { usePodcasts } from '~/composables/usePodcasts';
 
 const router = useRouter();
 const user = inject('user');
-
-// Références pour l'état du composant
 const userPodcasts = ref([]);
 const isLoading = ref(true);
 const showAddPodcastModal = ref(false);
 const showSuccessAlert = ref(false);
 
-// Récupération des podcasts de l'utilisateur
 const { getUserPodcasts } = usePodcasts();
 
-// Fonction pour déconnecter l'utilisateur
 const logout = () => {
   localStorage.removeItem('token');
   isAuthenticated.value = false;
@@ -119,7 +107,6 @@ const logout = () => {
   router.push('/auth');
 };
 
-// Fonction pour partager le profil de l'utilisateur
 const shareProfile = () => {
   if (navigator.share) {
     navigator.share({
@@ -134,7 +121,6 @@ const shareProfile = () => {
   }
 };
 
-// Surveillance des changements dans l'objet utilisateur et récupération des podcasts
 watchEffect(async () => {
   if (user.value && user.value.id) {
     try {
@@ -147,7 +133,6 @@ watchEffect(async () => {
   }
 });
 
-// Vérification et affichage de l'alerte de succès au montage du composant
 onMounted(() => {
   if (localStorage.getItem('podcastAdded') === 'true') {
     showSuccessAlert.value = true;

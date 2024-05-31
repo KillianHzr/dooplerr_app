@@ -1,6 +1,5 @@
 <template>
   <div class="relative wrapper-container mb-10">
-    <!-- Conteneur du carrousel avec des classes dynamiques basées sur la prop 'display' -->
     <div :class="displayClasses[display]" ref="carouselContainer">
       <slot />
     </div>
@@ -57,7 +56,6 @@
 <script setup>
 import { ref } from "vue";
 
-// Définition des classes de style pour chaque type d'affichage
 const displayClasses = {
   grid: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4",
   list: "flex flex-col gap-2 container mx-auto py-4",
@@ -65,7 +63,6 @@ const displayClasses = {
     "w-full flex gap-2 snap-x scroll-ps-6 overflow-x-auto custom-scrollbar",
 };
 
-// Définition des propriétés (props) du composant
 defineProps({
   display: String,
   default: "carrousel",
@@ -74,11 +71,9 @@ defineProps({
   },
 });
 
-// Référence pour le conteneur du carrousel
 const carouselContainer = ref(null);
 const isAtStart = ref(true); // Par défaut, le carrousel est au début
 
-// Fonction pour faire défiler le carrousel vers la droite
 const scrollRight = () => {
   const container = carouselContainer.value;
   container.scrollBy({
@@ -88,7 +83,6 @@ const scrollRight = () => {
   isAtStart.value = false; // Le carrousel n'est plus au début après le défilement
 };
 
-// Fonction pour faire défiler le carrousel vers la gauche
 const scrollLeft = () => {
   const container = carouselContainer.value;
   container.scrollBy({
@@ -100,6 +94,35 @@ const scrollLeft = () => {
 </script>
 
 <style>
+/* Gradient right */
+/* .wrapper-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -2rem;
+  bottom: 0;
+  width: 5rem;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.5), transparent);
+  z-index: 10;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+}
+
+.wrapper-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -2rem;
+  bottom: 0;
+  width: 5rem;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
+  z-index: 10;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+} */
+
 .wrapper-container:hover::before,
 .wrapper-container:hover::after {
   opacity: 1;

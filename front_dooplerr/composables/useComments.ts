@@ -4,7 +4,6 @@ export const useComments = () => {
   const config = useRuntimeConfig();
   const urlBase = `${config.public.BASE_URL}`;
 
-  // Ajouter un commentaire à un épisode
   async function addComment(episodeId: number, text: string) {
     try {
       const token = localStorage.getItem("token");

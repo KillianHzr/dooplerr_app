@@ -1,10 +1,7 @@
 <template>
   <div>
-    <!-- Titre de la section Détails de l'épisode -->
     <h2 class="text-white text-2xl font-semibold mb-4 italic">Détails de l'épisode</h2>
-    <!-- Formulaire de soumission de l'épisode -->
     <form @submit.prevent="submitEpisode" class="flex flex-col gap-2">
-      <!-- Champ de saisie du titre -->
       <div class="mb-4 order border border-white rounded-xl p-2 px-4">
         <label class="block text-white font-medium text-lg" for="title">Titre <span class="text-sm font-normal">(obligatoire)</span></label>
         <input
@@ -13,7 +10,6 @@
           placeholder="Titre de l'épisode"
           style="box-shadow: none;">
       </div>
-      <!-- Champ de saisie de la description -->
       <div class="mb-4 order border border-white rounded-xl p-2 px-4">
         <label class="block text-white font-medium text-lg" for="description">Description <span class="text-sm font-normal">(obligatoire)</span></label>
         <textarea
@@ -22,7 +18,6 @@
           placeholder="Description de l'épisode"
           style="box-shadow: none;"></textarea>
       </div>
-      <!-- Champ de saisie de la date de publication -->
       <div class="mb-4 order border border-white rounded-xl p-2 px-4">
         <label class="block text-white font-medium text-lg" for="release_date">Date de publication <span class="text-sm font-normal">(obligatoire)</span></label>
         <input
@@ -30,7 +25,6 @@
           id="release_date" type="date" v-model="release_date" required
           style="box-shadow: none;">
       </div>
-      <!-- Champ de téléchargement de fichier -->
       <div class="mb-4">
         <label class="block text-white font-medium text-lg" for="file">Fichier <span class="text-sm font-normal">(obligatoire)</span></label>
         <input
@@ -38,7 +32,6 @@
           id="file" type="file" @change="handleFileChange" required
           style="box-shadow: none;">
       </div>
-      <!-- Bouton de soumission et messages d'erreur ou de succès -->
       <div class="flex items-center justify-center w-full flex-col gap-3">
         <button
           class="border-white border text-white font-medium py-2 mt-6 px-10 rounded-xl focus:outline-none focus:shadow-outline"
@@ -54,7 +47,6 @@
 import { ref } from 'vue';
 import { useEpisodes } from '~/composables/useEpisodes';
 
-// Définition des props pour obtenir le nom du podcast
 const props = defineProps({
   podcast_name: {
     type: String,
@@ -62,10 +54,8 @@ const props = defineProps({
   }
 });
 
-// Importation de la fonction pour ajouter un épisode
 const { addEpisode } = useEpisodes();
 
-// Déclaration des variables réactives pour les données du formulaire
 const title = ref('');
 const description = ref('');
 const release_date = ref('');
@@ -73,7 +63,6 @@ const file = ref(null);
 const error = ref('');
 const success = ref('');
 
-// Fonction pour gérer le changement de fichier
 const handleFileChange = (event) => {
   const selectedFile = event.target.files[0];
   if (selectedFile) {
@@ -81,7 +70,6 @@ const handleFileChange = (event) => {
   }
 };
 
-// Fonction pour soumettre l'épisode
 const submitEpisode = async () => {
   error.value = '';
   success.value = '';
