@@ -2,7 +2,7 @@
   <div>
     <NuxtPwaManifest />
     <div class="min-h-screen relative">
-      <section class="pb-16 mx-auto" style="max-width: 500px;">
+      <section class="pb-16 mx-auto default-section" style="max-width: 630px;">
         <slot />
       </section>
 
