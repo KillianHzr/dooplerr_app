@@ -10,7 +10,8 @@
             </div>
             <button class="text-5xl font-thin -translate-y-2">+</button>
           </div>
-          <div class="flex flex-col gap-4">
+          <div class="flex flex-col w-full justify-center items-center">
+            <p class="text-dooplerr-grey-purple font-medium text-center pt-20 px-10">Acun podcast n'a été ajouté à tes playlists pour le moment...</p>
           </div>
           <div class="w-full flex flex-col items-center justify-center px-8 gap-5 pt-16">
             <div class="w-full flex px-5 py-2 items-center gap-6 border-2 border-dooplerr-grey-purple rounded-lg">
