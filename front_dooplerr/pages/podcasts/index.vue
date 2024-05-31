@@ -63,7 +63,7 @@
             class="px-2 py-1 flex flex-col text-white rounded-xl relative"
           >
             <NuxtLink :to="`/podcasts/categories/${category.id}?color=${encodeURIComponent(category.color)}`">
-              <h3 class="text-2xl font-medium italic pb-10">{{ category.name }}</h3>
+              <h3 class="text-xl font-medium italic pb-12">{{ category.name }}</h3>
               <div class="w-full flex justify-center absolute bottom-0 left-0">
                 <img src="~/assets/img/categories_bg.png" class="w-11/12" style="object-fit: cover;" />
               </div>

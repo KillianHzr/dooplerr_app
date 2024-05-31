@@ -32,7 +32,7 @@ import { ref } from 'vue';
 const displayClasses = {
     grid: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4",
     list: "flex flex-col gap-2 container mx-auto py-4",
-    carrousel: "w-full flex gap-8 snap-x scroll-ps-6 overflow-x-auto pb-10 custom-scrollbar"
+    carrousel: "w-full flex gap-2 snap-x scroll-ps-6 overflow-x-auto pb-10 custom-scrollbar"
 }
 
 defineProps({

@@ -60,8 +60,4 @@ defineProps({
 </script>
 
 <style scoped>
-.truncate-description {
-  overflow: hidden;
-  max-height: 20px;
-}
 </style>
