@@ -127,7 +127,7 @@ const showFullDescription = ref(false);
 
 const audio = ref(null);
 
-// Function to update media session metadata
+// Function pour loader les metadata de l'épisode
 const updateMediaSessionMetadata = () => {
   if ('mediaSession' in navigator && episode.value) {
     navigator.mediaSession.metadata = new MediaMetadata({
@@ -135,6 +135,11 @@ const updateMediaSessionMetadata = () => {
       artist: episode.value.Podcasts[0]?.title || 'Unknown',
       album: 'Podcast',
       artwork: [
+        { src: episode.value.Podcasts[0]?.thumbnail_path || '', sizes: '96x96', type: 'image/png' },
+        { src: episode.value.Podcasts[0]?.thumbnail_path || '', sizes: '128x128', type: 'image/png' },
+        { src: episode.value.Podcasts[0]?.thumbnail_path || '', sizes: '192x192', type: 'image/png' },
+        { src: episode.value.Podcasts[0]?.thumbnail_path || '', sizes: '256x256', type: 'image/png' },
+        { src: episode.value.Podcasts[0]?.thumbnail_path || '', sizes: '384x384', type: 'image/png' },
         { src: episode.value.Podcasts[0]?.thumbnail_path || '', sizes: '512x512', type: 'image/png' }
       ]
     });
@@ -162,8 +167,19 @@ const updateMediaSessionMetadata = () => {
       audio.value.currentTime = 0;
       isPlaying.value = false;
     });
+
+    navigator.mediaSession.setActionHandler('seekto', (details) => {
+      if (details.fastSeek && 'fastSeek' in audio.value) {
+        audio.value.fastSeek(details.seekTime);
+        return;
+      }
+      audio.value.currentTime = details.seekTime;
+      // Mettre à jour la barre de progression et le point
+      updateProgress();
+    });
   }
 };
+
 
 // Fetch episode by ID
 const fetchEpisode = async () => {
@@ -179,6 +195,7 @@ const fetchEpisode = async () => {
   }
 };
 
+// Set meta tags
 function setMetaTags() {
   useHead({
     title: episode.value.title,
@@ -203,6 +220,10 @@ const togglePlayPause = () => {
   isPlaying.value = !isPlaying.value;
 };
 
+const calcProgressDotPosition = computed(() => {
+    return `calc(${progress.value}% - 2px)`;
+});
+
 // Update progress
 const updateProgress = () => {
   if (audio.value) {
@@ -211,20 +232,21 @@ const updateProgress = () => {
   }
 };
 
-// Watch for audio time update
+// Mettre à jour la progression de l'audio
 onMounted(() => {
   if (audio.value) {
     audio.value.addEventListener('timeupdate', updateProgress);
   }
 });
 
-// Remove event listener on unmount
+// Supprimer l'écouteur d'événement lors du démontage du composant
 onUnmounted(() => {
   if (audio.value) {
     audio.value.removeEventListener('timeupdate', updateProgress);
   }
 });
 
+// Watch isPlaying pour mettre à jour les metadata
 watch(isPlaying, (newVal) => {
   if (newVal) {
     updateMediaSessionMetadata();
@@ -244,14 +266,14 @@ const onProgressBarClick = (event) => {
   audio.value.currentTime = (audio.value.duration / 100) * newProgress;
 };
 
-// Function to format date
+// Function pour afficher la description complète
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   const date = new Date(dateString);
   return date.toLocaleDateString('fr-FR', options);
 };
 
-// Calculate time since creation
+// Calculer le temps écoulé depuis la date
 const timeSince = (date) => {
   const now = new Date();
   const createdDate = new Date(date);
@@ -280,7 +302,7 @@ const timeSince = (date) => {
   return Math.floor(seconds) + " secondes";
 };
 
-// Submit a new comment
+// Envoyer un commentaire
 const submitComment = async () => {
   if (newComment.value.trim() === "") return;
 
@@ -293,7 +315,7 @@ const submitComment = async () => {
   }
 };
 
-// Generate a random color
+// Generer une couleur aléatoire
 const randomColor = computed(() => {
   const letters = '0123456789ABCDEF';
   let color = '#';
