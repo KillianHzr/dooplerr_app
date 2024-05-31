@@ -15,10 +15,12 @@
         </div>
         <div class="w-full">
             <div class="relative py-5">
-                <input type="text" class="w-full py-3 pl-11 pr-4 rounded-dooplerr border-transparent bg-dooplerr-grey focus:outline-none focus:border-indigo-400 text-white" placeholder="Un nouveau podcast ?">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Icon name="mingcute:search-line" size="20" class="text-dooplerr-grey-purple" />
-                </div>
+                <NuxtLink to="/podcasts">
+                    <input type="text" class="w-full py-3 pl-11 pr-4 rounded-dooplerr border-transparent bg-dooplerr-grey focus:outline-none focus:border-indigo-400 text-white" placeholder="Un nouveau podcast ?">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <Icon name="mingcute:search-line" size="20" class="text-dooplerr-grey-purple" />
+                    </div>
+                </NuxtLink>
             </div>
         </div>
     </section>
