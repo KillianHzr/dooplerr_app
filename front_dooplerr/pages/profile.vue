@@ -32,7 +32,7 @@
             <p>123 <span class="text-dooplerr-grey-purple">abonnements</span></p>
           </div>
           <div class="ml-auto self-end">
-            <button><Icon name="material-symbols:ios-share-rounded" size="20" /></button>
+            <button @click="shareProfile"><Icon name="material-symbols:ios-share-rounded" size="20" /></button>
           </div>
         </div>
       </div>
@@ -105,6 +105,20 @@ const logout = () => {
   isAuthenticated.value = false;
   user.value = {};
   router.push('/auth');
+};
+
+const shareProfile = () => {
+  if (navigator.share) {
+    navigator.share({
+      title: `Dooplerr | ${user.value.username}`,
+      text: 'Venez voir mon profil sur Dooplerr, la nouvelle plateforme de podcasts !',
+      url: window.location.href,
+    })
+    .then(() => console.log('Profile shared successfully'))
+    .catch((error) => console.error('Error sharing profile:', error));
+  } else {
+    console.error('Web Share API is not supported in this browser');
+  }
 };
 
 watchEffect(async () => {

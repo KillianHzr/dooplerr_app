@@ -60,7 +60,7 @@
         </div>
         <div class="flex justify-between w-full text-white mt-8">
           <button><Icon name="ic:outline-speaker" size="30" /></button>
-          <button><Icon name="material-symbols:ios-share-rounded" size="30" /></button>
+          <button @click="shareEpisode"><Icon name="material-symbols:ios-share-rounded" size="30" /></button>
         </div>
       </div>
       <NuxtLink :to="`/podcasts/` + episode.Podcasts[0].id" class="px-8 pt-14 flex text-white">
@@ -349,6 +349,21 @@ const randomColor = computed(() => {
 // Toggle like button
 const toggleLike = () => {
   isLiked.value = !isLiked.value;
+};
+
+// Share episode
+const shareEpisode = () => {
+  if (navigator.share) {
+    navigator.share({
+      title: `Dooplerr | ${episode.value.title}`,
+      text: 'Écoutez cet épisode sur Dooplerr, la nouvelle plateforme de podcasts !',
+      url: window.location.href,
+    })
+    .then(() => console.log('Episode shared successfully'))
+    .catch((error) => console.error('Error sharing episode:', error));
+  } else {
+    console.error('Web Share API is not supported in this browser');
+  }
 };
 </script>
 
