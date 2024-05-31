@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const path = require("path");
 const multer = require("multer");
-const { v4: uuidv4 } = require("uuid");
 
 const { Episode, Podcast, Category, UserPodcast } = require("../models/index");
 const { uploadToS3 } = require("../aws");
@@ -61,9 +59,7 @@ router.patch("/podcasts/:id", authentificationMiddleware, upload.single("thumbna
 
     const podcast = await Podcast.findByPk(req.params.id);
     if (!podcast) {
-      return res
-        .status(404)
-        .json({ error: "Le podcast spécifié n'existe pas." });
+      return res.status(404).json({ error: "Le podcast spécifié n'existe pas." });
     }
 
     const isAuthorized = await podcast.hasUser(req.user);
@@ -75,9 +71,7 @@ router.patch("/podcasts/:id", authentificationMiddleware, upload.single("thumbna
       where: { name: category_name },
     });
     if (!newCategory) {
-      return res
-        .status(404)
-        .json({ error: "La nouvelle catégorie spécifiée n'existe pas." });
+      return res.status(404).json({ error: "La nouvelle catégorie spécifiée n'existe pas." });
     }
 
     // Récupérer les anciennes catégories liées au podcast
@@ -112,24 +106,39 @@ router.patch("/podcasts/:id", authentificationMiddleware, upload.single("thumbna
     res.json(podcast);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "Erreur lors de la modification du podcast." });
+    res.status(500).json({ error: "Erreur lors de la modification du podcast." });
+  }
+});
+
+router.delete("/podcasts/:id", authentificationMiddleware, async (req, res) => {
+  try {
+    const podcast = await Podcast.findByPk(req.params.id);
+    if (!podcast) {
+      return res.status(404).json({ error: "Le podcast spécifié n'existe pas." });
+    }
+
+    const isAuthorized = await podcast.hasUser(req.user);
+    if (!isAuthorized) {
+      return res.status(403).json({ error: "Vous n'êtes pas autorisé à supprimer ce podcast." });
+    }
+
+    await podcast.destroy();
+    res.json({ message: "Podcast supprimé avec succès." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erreur lors de la suppression du podcast." });
   }
 });
 
 // POST /admin/episodes
 router.post("/episodes", authentificationMiddleware, upload.single("file"), async (req, res) => {
   try {
-    const { title, description, release_date, podcast_name } =
-      req.body;
+    const { title, description, release_date, podcast_name } = req.body;
 
     // Vérifier si le podcast existe
     const podcast = await Podcast.findOne({ where: { title: podcast_name } });
     if (!podcast) {
-      return res
-        .status(404)
-        .json({ error: "Le podcast spécifié n'existe pas." });
+      return res.status(404).json({ error: "Le podcast spécifié n'existe pas." });
     }
 
     // Vérifier si le fichier a été correctement téléchargé
@@ -139,9 +148,7 @@ router.post("/episodes", authentificationMiddleware, upload.single("file"), asyn
 
     // Vérifier si le fichier est au format MP3
     if (req.file.mimetype !== "audio/mpeg") {
-      return res
-        .status(400)
-        .json({ error: "Le fichier doit être au format MP3." });
+      return res.status(400).json({ error: "Le fichier doit être au format MP3." });
     }
 
     // Envoyer le fichier de l'épisode vers S3 dans le dossier "episodes"
@@ -176,9 +183,7 @@ router.patch("/episodes/:id", authentificationMiddleware, upload.single("file"),
 
     const episode = await Episode.findByPk(req.params.id);
     if (!episode) {
-      return res
-        .status(404)
-        .json({ error: "L'épisode spécifié n'existe pas." });
+      return res.status(404).json({ error: "L'épisode spécifié n'existe pas." });
     }
 
     let newPodcast;
@@ -189,9 +194,7 @@ router.patch("/episodes/:id", authentificationMiddleware, upload.single("file"),
       });
       
       if (!newPodcast) {
-        return res
-          .status(404)
-          .json({ error: "Le nouveau podcast spécifié n'existe pas." });
+        return res.status(404).json({ error: "Le nouveau podcast spécifié n'existe pas." });
       }
     }
 
@@ -229,13 +232,9 @@ router.patch("/episodes/:id", authentificationMiddleware, upload.single("file"),
     res.json(episode);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "Erreur lors de la modification de l'épisode." });
+    res.status(500).json({ error: "Erreur lors de la modification de l'épisode." });
   }
 });
-
-
 
 // Route pour ajouter une catégorie
 router.post("/categories", authentificationMiddleware, async (req, res) => {
@@ -249,9 +248,7 @@ router.post("/categories", authentificationMiddleware, async (req, res) => {
     res.json(category);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "Erreur lors de la création de la catégorie." });
+    res.status(500).json({ error: "Erreur lors de la création de la catégorie." });
   }
 });
 

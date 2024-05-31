@@ -6,7 +6,7 @@
           <Icon name="material-symbols-light:arrow-back-ios-rounded" size="27" />
         </button>
         <div class="flex gap-5 items-center justify-center">
-          <button class="flex items-center justify-center border border-dooplerr-grey-purple rounded-full text-xs py-1 px-4">
+          <button @click="showDeleteConfirmation = true" class="flex items-center justify-center border border-dooplerr-grey-purple rounded-full text-xs py-1 px-4">
             <Icon name="material-symbols:delete-outline-rounded" size="20" />
           </button>
           <button @click="showEditModal = true" class="border border-dooplerr-grey-purple rounded-full text-xs py-1 px-10 italic">Modifier</button>
@@ -75,14 +75,27 @@
       <Modal v-if="showEditModal" @close="showEditModal = false">
         <EditPodcastForm :podcast="podcast" @close="showEditModal = false" />
       </Modal>
+
+      <!-- Delete Podcast Confirmation Modal -->
+      <Modal v-if="showDeleteConfirmation" @close="showDeleteConfirmation = false">
+        <div class="p-5">
+          <h3 class="text-2xl mb-4 font-medium italic">Confirmer la suppression</h3>
+          <p>Es-tu sûr de vouloir supprimer ce podcast ? Cette action est irréversible.</p>
+          <div class="flex justify-end gap-3 mt-5">
+            <button class="border-white border rounded-full text-white py-2 px-4" @click="deletePodcast">Supprimer</button>
+            <button class="border-white border rounded-full text-white py-2 px-4 opacity-75" @click="showDeleteConfirmation = false">Annuler</button>
+          </div>
+        </div>
+      </Modal>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useEpisodes } from '~/composables/useEpisodes';
+import { usePodcasts } from '~/composables/usePodcasts';
 import Modal from '~/components/Modal.vue';
 import EditPodcastForm from '~/components/EditPodcastForm.vue';
 import AddEpisodeForm from '~/components/AddEpisodeForm.vue';
@@ -90,6 +103,7 @@ import CardEpisode from '~/components/CardEpisode.vue';
 
 const { params } = useRoute();
 const { getEpisodes, getPodcastById } = useEpisodes();
+const { deletePodcastById } = usePodcasts();
 const showSuccessAlert = ref(false);
 const showSuccessAlertEpisode = ref(false);
 
@@ -97,7 +111,9 @@ const podcast = ref({});
 const podcastEpisodes = ref([]);
 const showEditModal = ref(false);
 const showAddEpisodeModal = ref(false);
+const showDeleteConfirmation = ref(false);
 const isLoading = ref(true);
+const router = useRouter();
 
 async function fetchPodcastDetails() {
   try {
@@ -115,6 +131,15 @@ async function fetchPodcastEpisodes() {
     console.error('Error fetching podcast episodes:', error);
   } finally {
     isLoading.value = false;
+  }
+}
+
+async function deletePodcast() {
+  try {
+    await deletePodcastById(params.id);
+    router.push('/profile');
+  } catch (error) {
+    console.error('Error deleting podcast:', error);
   }
 }
 

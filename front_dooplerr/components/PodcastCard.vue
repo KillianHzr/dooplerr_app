@@ -15,7 +15,7 @@
         </div>
         <div class="flex items-center gap-1 me-4">
           <Icon name="ph:chat-circle-bold" size="20" />
-          <span class="text-dooplerr-grey-purple">0</span>
+          <span class="text-dooplerr-grey-purple">{{ commentsCount }}</span>
         </div>
       </div>
     </div>
@@ -44,15 +44,7 @@ defineProps({
     type: String,
     required: true
   },
-  listening: {
-    type: Number,
-    required: true
-  },
-  likes: {
-    type: Number,
-    required: true
-  },
-  comments: {
+  commentsCount: {
     type: Number,
     required: true
   },
