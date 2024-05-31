@@ -66,11 +66,27 @@ export const usePodcasts = () => {
     }
   }
 
+  async function deletePodcastById(id: string) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${urlBase}/admin/podcasts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting podcast:", error);
+      throw error;
+    }
+  }
+
   return {
     getPodcasts,
     getPodcastEpisodes,
     getUserPodcasts,
     addPodcast,
     updatePodcast,
+    deletePodcastById,
   };
 };
