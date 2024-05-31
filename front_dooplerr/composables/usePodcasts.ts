@@ -4,6 +4,7 @@ export const usePodcasts = () => {
   const config = useRuntimeConfig();
   const urlBase = `${config.public.BASE_URL}`;
 
+  // Récupérer les podcasts
   async function getPodcasts() {
     try {
       const response = await axios.get(`${urlBase}/podcasts`);
@@ -14,6 +15,7 @@ export const usePodcasts = () => {
     }
   }
 
+  // Récupérer les épisodes d'un podcast
   async function getPodcastEpisodes(id: string) {
     try {
       const response = await axios.get(`${urlBase}/podcasts/${id}`);
@@ -24,6 +26,7 @@ export const usePodcasts = () => {
     }
   }
 
+  // Récupérer les podcasts d'un utilisateur
   async function getUserPodcasts(userId: string) {
     try {
       const response = await axios.get(`${urlBase}/users/${userId}/podcasts`);
@@ -34,6 +37,7 @@ export const usePodcasts = () => {
     }
   }
 
+  // Ajouter un podcast
   async function addPodcast(formData: FormData) {
     try {
       const token = localStorage.getItem("token");
@@ -50,6 +54,7 @@ export const usePodcasts = () => {
     }
   }
 
+  // Mettre à jour un podcast
   async function updatePodcast(id: string, formData: FormData) {
     try {
       const token = localStorage.getItem("token");
@@ -66,6 +71,7 @@ export const usePodcasts = () => {
     }
   }
 
+  // Supprimer un podcast
   async function deletePodcastById(id: string) {
     try {
       const token = localStorage.getItem("token");

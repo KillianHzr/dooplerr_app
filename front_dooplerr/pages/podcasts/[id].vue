@@ -148,7 +148,7 @@ async function fetchPodcastEpisodes() {
   }
 }
 
-// Supprimer le podcast
+// Supprimer le podcast actuel
 async function deletePodcast() {
   try {
     await deletePodcastById(params.id);
