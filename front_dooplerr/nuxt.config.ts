@@ -34,7 +34,8 @@ export default defineNuxtConfig({
       short_name: "dooplerr",
       description: "Dooplerr - La nouvelle plateforme de podcasts !",
       lang: "fr",
-      theme_color: "#0D0B21",
+      theme_color: "#ffffff",
+      background_color: "#0D0B21",
       icons: [
         {
           src: 'pwa-192x192.png',
