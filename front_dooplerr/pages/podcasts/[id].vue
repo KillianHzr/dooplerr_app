@@ -31,7 +31,7 @@
     <div v-else>
       <!-- Contenu du podcast -->
       <div class="flex flex-col md:flex-row justify-center items-center md:items-start px-6">
-        <div class="img-podcast w-full md:w-1/4 md:mr-6 aspect-square" :style="{ backgroundImage: 'url(' + podcast.thumbnail_path + ')' }" style="max-width: 350px; max-height: 350px;"></div>
+        <div class="img-podcast w-full md:w-1/4 md:mr-6 aspect-square" :style="{ backgroundImage: 'url(' + podcast.thumbnail_path + ')' }" :alt="`Podcast - ${podcast.title}`" style="max-width: 350px; max-height: 350px;"></div>
         <div class="md:w-3/4">
           <h1 class="text-4xl font-bold text-white mt-4">{{ podcast.title }}</h1>
           <div :class="{ 'max-h-full': showFullDescription }" class="text-lg text-black mt-2 description-box bg-[#6C6A88] p-2 rounded-md transition-all duration-300 ease-in-out">
