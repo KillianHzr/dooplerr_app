@@ -1,5 +1,4 @@
 const sequelize = require("./_database");
-
 const Podcast = require("./Podcast");
 const Episode = require("./Episode");
 const PodcastEpisode = require("./PodcastEpisode");
@@ -7,37 +6,36 @@ const Comment = require("./Comment");
 const EpisodeComment = require("./EpisodeComment");
 const Category = require("./Category");
 const PodcastCategory = require("./PodcastCategory");
-
 const User = require("./User");
 const UserPodcast = require("./UserPodcast");
 const UserComment = require("./UserComment");
 const UserHistory = require("./UserHistory");
 
-// Configurez les associations
+// Relation entre Podcast et Episode via PodcastEpisode
 Podcast.belongsToMany(Episode, { through: PodcastEpisode });
 Episode.belongsToMany(Podcast, { through: PodcastEpisode });
 
-// Utilisez belongsToMany pour associer plusieurs commentaires à un épisode
+// Relation entre Episode et Comment via EpisodeComment
 Episode.belongsToMany(Comment, { through: EpisodeComment });
 Comment.belongsToMany(Episode, { through: EpisodeComment });
 
-// Utilisez belongsToMany pour associer plusieurs catégories à un podcast
+// Relation entre Podcast et Category via PodcastCategory
 Podcast.belongsToMany(Category, { through: PodcastCategory });
 Category.belongsToMany(Podcast, { through: PodcastCategory });
 
-// Utilisez belongsToMany pour associer plusieurs podcasts à un utilisateur
+// Relation entre User et Podcast via UserPodcast
 User.belongsToMany(Podcast, { through: UserPodcast });
 Podcast.belongsToMany(User, { through: UserPodcast });
 
-// Utilisez belongsToMany pour associer plusieurs commentaires à un utilisateur
+// Relation entre User et Comment via UserComment
 User.belongsToMany(Comment, { through: UserComment });
 Comment.belongsToMany(User, { through: UserComment });
 
-// Utilisez belongsToMany pour associer plusieurs épisodes à un utilisateur
+// Relation entre User et Episode via UserHistory
 User.belongsToMany(Episode, { through: UserHistory });
 Episode.belongsToMany(User, { through: UserHistory });
 
-// // Synchronisation de la base
+
 sequelize.sync();
 
 module.exports = {

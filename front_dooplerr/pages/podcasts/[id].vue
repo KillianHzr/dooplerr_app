@@ -1,5 +1,6 @@
 <template>
   <div class="text-white px-5">
+    <!-- Section de navigation avec bouton de retour et options d'édition/suppression si propriétaire -->
     <section class="w-full py-10 flex flex-col">
       <div class="flex justify-between">
         <button @click="$router.back()">
@@ -14,6 +15,7 @@
       </div>
     </section>
 
+    <!-- Notifications de succès -->
     <div v-if="showSuccessAlert" class="fixed top-0 left-0 right-0 bg-green-500 text-white text-center py-2 z-50 m-5">
       Podcast modifié avec succès
     </div>
@@ -22,12 +24,14 @@
       Épisode ajouté avec succès
     </div>
 
+    <!-- Section de chargement avec un spinner -->
     <section v-if="isLoading" class="flex justify-center items-center py-10">
       <div class="spinner-border text-dooplerr-grey-purple" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </section>
 
+    <!-- Contenu principal -->
     <div v-else>
       <!-- Contenu du podcast -->
       <div class="flex flex-col justify-center items-center px-6">
@@ -56,6 +60,7 @@
         </div>
       </div>
 
+      <!-- Message lorsqu'il n'y a pas d'épisodes -->
       <section v-else>
         <div class="px-5 font-medium">
           <h2 class="text-2xl italic pt-10 pb-6 font-medium">Mes épisodes</h2>
@@ -69,17 +74,17 @@
         </div>
       </section>
 
-      <!-- Add Episode Modal -->
+      <!-- Modale pour ajouter un épisode -->
       <Modal v-if="showAddEpisodeModal" @close="showAddEpisodeModal = false">
         <AddEpisodeForm :podcast_name="podcast.title" @close="showAddEpisodeModal = false" @success="fetchPodcastEpisodes" />
       </Modal>
 
-      <!-- Edit Podcast Modal -->
+      <!-- Modale pour éditer le podcast -->
       <Modal v-if="showEditModal" @close="showEditModal = false">
         <EditPodcastForm :podcast="podcast" @close="showEditModal = false" />
       </Modal>
 
-      <!-- Delete Podcast Confirmation Modal -->
+      <!-- Modale de confirmation de suppression -->
       <Modal v-if="showDeleteConfirmation" @close="showDeleteConfirmation = false">
         <div class="p-5">
           <h3 class="text-2xl mb-4 font-medium italic">Confirmer la suppression</h3>
@@ -95,7 +100,6 @@
 </template>
 
 <script setup>
-
 const { params } = useRoute();
 const { getEpisodes, getPodcastById } = useEpisodes();
 const { deletePodcastById } = usePodcasts();

@@ -1,7 +1,9 @@
 <template>
   <div :class="`min-h-screen flex flex-col justify-center text-white mx-auto md:max-w-[600px]`">
+    <!-- Affichage des plans si aucun plan n'est sélectionné -->
     <div v-if="!planSelected" class="py-12 px-5">
       <div class="flex flex-col gap-4">
+        <!-- Carte de plan Bon plan -->
         <PlanCard 
           planName="Bon plan" 
           price="Gratuit" 
@@ -11,6 +13,7 @@
           buttonText="Obtenez Bon plan"
           @selectPlan="selectPlan"
         />
+        <!-- Carte de plan Premium Étudiant -->
         <PlanCard 
           planName="Premium Étudiant" 
           price="5,99 €" 
@@ -21,6 +24,7 @@
           buttonText="Obtenez Premium Étudiant"
           @selectPlan="selectPlan"
         />
+        <!-- Carte de plan Premium Duo -->
         <PlanCard 
           planName="Premium Duo" 
           price="14,99 €" 
@@ -31,6 +35,7 @@
           buttonText="Obtenez Premium Duo"
           @selectPlan="selectPlan"
         />
+        <!-- Carte de plan Premium Famille -->
         <PlanCard 
           planName="Premium Famille" 
           price="17,99 €" 
@@ -44,6 +49,7 @@
       </div>
     </div>
     
+    <!-- Formulaire de création de compte si un plan est sélectionné -->
     <div v-else>
       <div class="py-12 px-5">
         <h2 class="text-2xl italic">Créer ton compte Dooplerr</h2>
@@ -61,7 +67,9 @@
         </p>
       </div>
 
+      <!-- Formulaire d'inscription -->
       <form class="text-sm italic" @submit.prevent="validateAndRegister">
+        <!-- Section des informations d'identification -->
         <div :class="`flex flex-col gap-6 px-5 py-16 border-dooplerr-${borderColor} border-t`">
           <div class="flex items-center">
             <label for="username" class="w-1/3 font-medium">Indentifiant</label>
@@ -83,6 +91,7 @@
           </div>
           <p v-if="error" class="text-red-500">{{ error }}</p>
         </div>
+        <!-- Section des informations personnelles -->
         <div :class="`flex flex-col gap-6 px-5 py-16 border-dooplerr-${borderColor} border-t`">
           <div class="flex items-center">
             <label for="email" class="w-1/3 font-medium">Adresse e-mail</label>
@@ -103,6 +112,7 @@
               placeholder="Entrez votre nom de famille">
           </div>
         </div>
+        <!-- Bouton de soumission du formulaire et inscription avec Google -->
         <div :class="`flex flex-col gap-6 px-5 py-8 border-dooplerr-${borderColor} border-t`">
           <button type="submit"
             :class="`w-full py-2 px-4 border border-transparent font-medium rounded-md text-white bg-dooplerr-${color} uppercase text-lg`">
@@ -124,10 +134,12 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
+// Définir les métadonnées de la page pour désactiver la mise en page par défaut
 definePageMeta({
   layout: false,
 });
 
+// Variables réactives pour les champs de saisie et les messages d'erreur
 const username = ref('');
 const firstname = ref('');
 const lastname = ref('');
@@ -148,10 +160,12 @@ const colorMap = {
   family: 'red'
 };
 
+// Variables réactives pour la sélection du plan
 const planSelected = ref(route.query.plan || false);
 const color = ref(colorMap[route.query.plan] || 'yellow');
 const borderColor = ref(colorMap[route.query.plan] || 'dooplerr-yellow');
 
+// Fonction pour sélectionner un plan
 const selectPlan = (plan) => {
   router.push({ query: { plan } });
   planSelected.value = plan;
@@ -159,11 +173,13 @@ const selectPlan = (plan) => {
   borderColor.value = colorMap[plan];
 };
 
+// Fonction pour revenir à la sélection des plans
 const goBack = () => {
   router.push({ query: {} });
   planSelected.value = false;
 };
 
+// Fonction pour valider et enregistrer le compte
 const validateAndRegister = async () => {
   if (password.value !== confirmPassword.value) {
     error.value = 'Les mots de passe ne correspondent pas';
@@ -186,10 +202,12 @@ const validateAndRegister = async () => {
   }
 };
 
+// Fonction pour s'inscrire avec Google
 const registerWithGoogle = () => {
   window.location.href = `${urlBase}/auth/google`;
 };
 
+// Vérifier l'authentification de l'utilisateur
 const isAuthenticated = ref(false);
 
 const checkAuth = () => {
@@ -201,6 +219,7 @@ const checkAuth = () => {
   }
 };
 
+// Vérifier l'authentification lors du montage du composant
 onMounted(() => {
   checkAuth();
 });

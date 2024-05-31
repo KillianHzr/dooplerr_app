@@ -1,6 +1,6 @@
 <template>
   <div class="container max-w-screen-sm mx-auto mb-28">
-    <!-- Titre de l'épisode -->
+    <!-- Titre de l'épisode et bouton de retour -->
     <div class="flex justify-around my-10 px-8 items-center relative w-full">
       <button @click="$router.back()" class="text-white absolute left-0 top-0 px-8">
         <Icon name="material-symbols-light:arrow-back-ios-rounded" size="27" />
@@ -10,12 +10,14 @@
       </h3>
     </div>
 
+    <!-- Section de chargement avec un spinner -->
     <section v-if="isLoading" class="flex justify-center items-center py-10">
       <div class="spinner-border text-dooplerr-grey-purple" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </section>
 
+    <!-- Contenu principal de l'épisode -->
     <div v-else>
       <!-- Image de l'épisode -->
       <div class="flex flex-col justify-center items-center px-8">
@@ -63,6 +65,7 @@
           <button @click="shareEpisode"><Icon name="material-symbols:ios-share-rounded" size="30" /></button>
         </div>
       </div>
+      <!-- Lien vers la page du podcast -->
       <NuxtLink :to="`/podcasts/` + episode.Podcasts[0].id" class="px-8 pt-14 flex text-white">
         <img :src="episode.Podcasts[0].thumbnail_path" class="rounded-lg bg-gray-300 me-8" width="90" height="90" style="min-width: 90px; min-height: 90px; max-height: 90px; max-width: 90px; object-fit: cover;" />
         <div class="flex flex-col justify-center">
@@ -77,6 +80,7 @@
         </div>
       </NuxtLink>
       <div class="px-8 pt-8">
+        <!-- Description de l'épisode -->
         <div :class="{ 'max-h-full': showFullDescription }" class="text-lg text-black mt-2 description-box bg-[#6C6A88] p-2 mb-5 rounded-md transition-all duration-300 ease-in-out">
           <p class="text-white italic font-medium">Il y a {{ timeSince(episode.Podcasts[0].createdAt) }}</p>
           <p :class="{ 'line-clamp': !showFullDescription }" class="font-medium py-4">{{ episode.Podcasts[0].description }}</p>
@@ -91,10 +95,11 @@
           <!-- Nombre de commentaire avec ou sans s à commentaire -->
           {{ episode.Comments.length > 1 ? episode.Comments.length + ' commentaires' : episode.Comments.length + ' commentaire' }}
         </h2>
-        <!-- Form add comment -->
+        <!-- Formulaire pour ajouter un commentaire -->
         <div class="flex gap-4">
           <input v-model="newComment" @keydown.enter="submitComment" type="text" class="w-full border-0 border-b-2 bg-transparent text-white mb-5" placeholder="Ajouter un commentaire" aria-label="Ajouter un commentaire">
         </div>
+        <!-- Affichage des commentaires -->
         <div v-for="comment in episode.Comments" :key="comment.id" class="mb-4">
           <div class="flex gap-2 items-start">
             <div class="flex items-center gap-3">
@@ -144,7 +149,7 @@ const progressDotPosition = ref(0);
 const newComment = ref("");
 const isLoading = ref(true); 
 const showFullDescription = ref(false);
-const isLiked = ref(false);  // State for like button
+const isLiked = ref(false);  // État pour le bouton de like
 
 const audio = ref(null);
 
@@ -201,8 +206,7 @@ const updateMediaSessionMetadata = () => {
   }
 };
 
-
-// Fetch episode by ID
+// Récupérer l'épisode par ID
 const fetchEpisode = async () => {
   try {
     const loadedEpisode = await getEpisodeById(params.id);
@@ -216,7 +220,7 @@ const fetchEpisode = async () => {
   }
 };
 
-// Set meta tags
+// Définir les meta tags
 function setMetaTags() {
   useHead({
     title: episode.value.title,
@@ -229,9 +233,10 @@ function setMetaTags() {
   });
 }
 
+// Appeler fetchEpisode au montage du composant
 onMounted(fetchEpisode);
 
-// Toggle play and pause
+// Fonction pour jouer ou mettre en pause
 const togglePlayPause = () => {
   if (isPlaying.value) {
     audio.value.pause();
@@ -242,10 +247,10 @@ const togglePlayPause = () => {
 };
 
 const calcProgressDotPosition = computed(() => {
-    return `calc(${progress.value}% - 2px)`;
+  return `calc(${progress.value}% - 2px)`;
 });
 
-// Update progress
+// Mettre à jour la progression
 const updateProgress = () => {
   if (audio.value) {
     progress.value = (audio.value.currentTime / audio.value.duration) * 100;
@@ -253,7 +258,7 @@ const updateProgress = () => {
   }
 };
 
-// Mettre à jour la progression de l'audio
+// Ajouter un écouteur d'événement pour la mise à jour de la progression
 onMounted(() => {
   if (audio.value) {
     audio.value.addEventListener('timeupdate', updateProgress);
@@ -267,14 +272,14 @@ onUnmounted(() => {
   }
 });
 
-// Watch isPlaying pour mettre à jour les metadata
+// Regarder isPlaying pour mettre à jour les metadata
 watch(isPlaying, (newVal) => {
   if (newVal) {
     updateMediaSessionMetadata();
   }
 });
 
-// Function to handle progress bar click
+// Fonction pour gérer le clic sur la barre de progression
 const onProgressBarClick = (event) => {
   const progressBar = event.currentTarget;
   const clickPosition = event.offsetX;
@@ -287,7 +292,7 @@ const onProgressBarClick = (event) => {
   audio.value.currentTime = (audio.value.duration / 100) * newProgress;
 };
 
-// Function pour afficher la description complète
+// Formater la date
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   const date = new Date(dateString);
@@ -323,20 +328,20 @@ const timeSince = (date) => {
   return Math.floor(seconds) + " secondes";
 };
 
-// Envoyer un commentaire
+// Soumettre un commentaire
 const submitComment = async () => {
   if (newComment.value.trim() === "") return;
 
   try {
     await addComment(params.id, newComment.value);
     newComment.value = "";
-    await fetchEpisode(); // Refresh comments after adding
+    await fetchEpisode(); // Rafraîchir les commentaires après l'ajout
   } catch (error) {
     console.error("Error adding comment:", error);
   }
 };
 
-// Generer une couleur aléatoire
+// Générer une couleur aléatoire
 const randomColor = computed(() => {
   const letters = '0123456789ABCDEF';
   let color = '#';
@@ -351,7 +356,7 @@ const toggleLike = () => {
   isLiked.value = !isLiked.value;
 };
 
-// Share episode
+// Partager l'épisode
 const shareEpisode = () => {
   if (navigator.share) {
     navigator.share({

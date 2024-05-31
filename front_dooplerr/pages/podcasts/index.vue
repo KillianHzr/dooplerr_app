@@ -1,5 +1,6 @@
 <template>
   <div class="px-5">
+    <!-- Section de navigation supérieure avec logo et icônes de profil et de messages -->
     <section class="w-full pt-10 pb-5 flex flex-col text-white">
       <div class="flex justify-between">
         <NuxtLink to="/" active-class="active-link" aria-label="Accueil">
@@ -30,14 +31,17 @@
       </div>
     </section>
 
+    <!-- Section de chargement avec un spinner -->
     <section v-if="isLoading" class="flex justify-center items-center py-10">
       <div class="spinner-border text-dooplerr-grey-purple" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </section>
 
+    <!-- Contenu principal -->
     <div v-else class="container mx-auto">
       <div v-if="!searchQuery">
+        <!-- Section "Le plus recherché" -->
         <h2 class="text-xl uppercase font-bold text-white mb-4 italic">
           Le plus recherché
         </h2>
@@ -52,6 +56,7 @@
           <img :src="filteredPodcasts[0].thumbnail_path" class="rounded-lg bg-gray-300 ml-auto" width="90" height="90" style="min-width: 90px; min-height: 90px; max-height: 90px; max-width: 90px; object-fit: cover;" />
         </NuxtLink>
 
+        <!-- Section "Toutes les catégories" -->
         <h2 class="text-normal uppercase font-bold text-white mb-4 italic">
           Toutes les catégories
         </h2>
@@ -72,6 +77,7 @@
         </div>
       </div>
 
+      <!-- Section des résultats de recherche -->
       <h2 class="text-xl uppercase font-bold text-white mb-4 italic" v-if="searchQuery">
         Résultats de la recherche
       </h2>
@@ -99,9 +105,11 @@ import { useRoute } from 'vue-router';
 import { usePodcasts } from '~/composables/usePodcasts';
 import { useCategories } from '~/composables/useCategories';
 
+// Récupération des fonctions nécessaires pour obtenir les podcasts et les catégories
 const { getPodcasts } = usePodcasts();
 const { getCategories } = useCategories();
 
+// Initialisation des références pour l'état du composant
 const podcasts = ref([]);
 const searchQuery = ref('');
 const filteredPodcasts = ref([]);
@@ -117,6 +125,7 @@ const categoryColors = [
 const categories = ref([]);
 const allCategories = ref([]);
 
+// Fonction exécutée au montage du composant
 onMounted(async () => {
   try {
     const allPodcasts = await getPodcasts();
@@ -141,6 +150,7 @@ onMounted(async () => {
   }
 });
 
+// Filtrer les podcasts en fonction de la recherche
 const filterPodcasts = () => {
   if (searchQuery.value) {
     filteredPodcasts.value = podcasts.value.filter(podcast =>
@@ -151,6 +161,7 @@ const filterPodcasts = () => {
   }
 };
 
+// Observer les changements de la recherche
 watch([searchQuery, () => route.query.search], () => {
   filterPodcasts();
 });

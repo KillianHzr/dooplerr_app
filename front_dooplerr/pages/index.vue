@@ -2,23 +2,27 @@
   <div class="px-5 text-white">
     <TopNav />
 
+    <!-- Section de chargement avec un spinner -->
     <section v-if="isLoading" class="flex justify-center items-center py-10">
       <div class="spinner-border text-dooplerr-grey-purple" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </section>
 
+    <!-- Contenu principal lorsque le chargement est terminé -->
     <div v-else class="container mx-auto">
+      <!-- Section "Mes émissions" -->
       <h2 class="text-xl uppercase font-bold text-white mb-4 italic">
         Mes émissions
       </h2>
-        <Wrapper display="carrousel">
-          <CardPodcast v-for="podcast in podcasts" :key="podcast.id" :podcast="podcast"
-            class="group relative aspect-square min-w-[120px] cursor-pointer overflow-hidden rounded-xl snap-start">
-          </CardPodcast>
-        </Wrapper>
-      </div>
+      <Wrapper display="carrousel">
+        <CardPodcast v-for="podcast in podcasts" :key="podcast.id" :podcast="podcast"
+          class="group relative aspect-square min-w-[120px] cursor-pointer overflow-hidden rounded-xl snap-start">
+        </CardPodcast>
+      </Wrapper>
 
+      
+      <!-- Section "Pour toi" -->
       <h2 class="text-xl uppercase font-bold text-white mb-4 italic">
         Pour toi
       </h2>
@@ -31,6 +35,7 @@
         </NuxtLink>
       </div>
 
+      <!-- Section "Le plus écouté de la semaine" -->
       <h2 class="text-xl uppercase font-bold text-white mb-4 italic">
         Le plus écouté de la semaine
       </h2>
@@ -44,6 +49,7 @@
         </div>
         <img :src="mostListenedPodcast.thumbnail_path" class="rounded-lg bg-gray-300 ml-auto" width="90" height="90" style="min-width: 90px; min-height: 90px; max-height: 90px; max-width: 90px; object-fit: cover;" />
       </NuxtLink>
+    </div>
   </div>
 </template>
 
@@ -51,17 +57,21 @@
 import { ref, onMounted } from 'vue';
 import { usePodcasts } from '~/composables/usePodcasts';
 
+// Récupération des fonctions nécessaires pour obtenir les podcasts
 const { getPodcasts } = usePodcasts();
 
+// Initialisation des références pour l'état du composant
 const podcasts = ref([]);
 const isLoading = ref(true);
 const mostListenedPodcast = ref({});
 
+// Couleurs pour les sections
 const categoryColors = [
   '#8953C5', '#C55353', '#4972C3', '#28BC51', '#D4498C', '#EEBA00',
   '#2939CA', '#14BDBD', '#DB62F9', '#5B15A1', '#910862', '#AA0B3B'
 ];
 
+// Définition des sections
 const sections = ref([
   { title: 'Reprendre', color: categoryColors[0], link: '/playlists' },
   { title: 'Podcasts Likés', color: categoryColors[1], link: '/playlists' },
@@ -69,11 +79,12 @@ const sections = ref([
   { title: 'Podcasts Abonnés', color: categoryColors[3], link: '/playlists' }
 ]);
 
+// Fonction exécutée au montage du composant
 onMounted(async () => {
   try {
     const allPodcasts = await getPodcasts();
     podcasts.value = allPodcasts.filter(podcast => podcast.public);
-    mostListenedPodcast.value = podcasts.value[0]; // Assuming the first one is the most listened
+    mostListenedPodcast.value = podcasts.value[0];
   } catch (error) {
     console.error('Error fetching podcasts:', error);
   } finally {

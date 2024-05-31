@@ -31,7 +31,7 @@ router.get("/podcasts/:id", async (req, res) => {
 
 router.get("/episodes", async (req, res) => {
   const episodes = await Episode.findAll({
-    // Get podcast and comments for each episode
+    // Récupérer les podcasts et commentaires pour chaque épisode
     include: [Podcast, Comment],
   });
   res.json(episodes);
@@ -39,7 +39,7 @@ router.get("/episodes", async (req, res) => {
 
 router.get("/episodes/:id", async (req, res) => {
   const episode = await Episode.findByPk(req.params.id, {
-    // Get podcast and comments for each episode with user
+    // Récupérer les podcasts et commentaires pour chaque épisode
     include: [Podcast, 
       {
         model: Comment,
@@ -135,7 +135,7 @@ router.get("/users/:id/podcasts", async (req, res) => {
 router.get("/categories", async (req, res) => {
   try {
     const categories = await Category.findAll(
-      // Get podcast for each category
+      // Récupérer les podcasts de chaque catégorie
       { include: Podcast }
     );
     res.json(categories);

@@ -4,6 +4,7 @@ export const useEpisodes = () => {
   const config = useRuntimeConfig();
   const urlBase = `${config.public.BASE_URL}`;
 
+  // Récupérer tous les épisodes
   async function getEpisodes() {
     try {
       const response = await axios.get(`${urlBase}/episodes`);
@@ -14,6 +15,7 @@ export const useEpisodes = () => {
     }
   }
 
+  // Récupérer un épisode par ID
   async function getEpisodeById(id: string) {
     try {
       const response = await axios.get(`${urlBase}/episodes/${id}`);
@@ -24,6 +26,7 @@ export const useEpisodes = () => {
     }
   }
 
+  // Récupérer un podcast par ID
   async function getPodcastById(id: string) {
     try {
       const response = await axios.get(`${urlBase}/podcasts/${id}`);
@@ -34,6 +37,7 @@ export const useEpisodes = () => {
     }
   }
 
+  // Ajouter un épisode
   async function addEpisode(formData: FormData) {
     try {
       const token = localStorage.getItem("token");
