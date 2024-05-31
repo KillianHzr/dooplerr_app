@@ -7,7 +7,7 @@
     <div
       v-if="!isAtStart"
       :class="{ active: !isAtStart }"
-      class="absolute arrow left-[-2rem] top-0 bottom-0 flex items-center justify-center z-50"
+      class="absolute arrow left-[-5rem] top-0 bottom-0 flex items-center justify-center z-50"
     >
       <button @click="scrollLeft">
         <svg
@@ -30,7 +30,7 @@
 
     <!-- Flèche de défilement vers la droite -->
     <div
-      class="absolute arrow right-[-2rem] top-0 bottom-0 flex items-center justify-center z-50"
+      class="absolute active arrow right-[-5rem] top-0 bottom-0 flex items-center justify-center z-50"
     >
       <button @click="scrollRight">
         <svg
@@ -133,7 +133,7 @@ const scrollLeft = () => {
   transition: all 0.3s ease-in-out;
 }
 
-.wrapper-container:hover .arrow:not(.active) {
+.wrapper-container:hover .arrow.active {
   opacity: 1;
 }
 </style>
