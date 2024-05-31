@@ -26,8 +26,8 @@
         </div>
         <div class="w-full flex my-8 justify-between">
           <div class="flex flex-col">
-            <h2 class="text-2xl font-semibold text-white">{{ episode.Podcasts && episode.Podcasts.length > 0 ? episode.Podcasts[0].title : '' }}</h2>
-            <h1 class="text-lg italic text-white">"{{ episode.title }}"</h1>
+            <h2 class="text-2xl italic font-semibold text-white">{{ episode.Podcasts && episode.Podcasts.length > 0 ? episode.Podcasts[0].title : '' }}</h2>
+            <h1 class="text-lg text-white">"{{ episode.title }}"</h1>
           </div>
           
           <!-- Bouton de like -->
@@ -38,35 +38,54 @@
       </div>
 
       <!-- Lecteur audio -->
-      <div v-if="episode" class="w-full flex flex-col items-center px-8">
+      <div v-if="episode" class="w-full flex flex-col items-center px-8 mt-2">
         <audio ref="audio" :src="episode.file_path" preload="metadata" :alt="episode.title"></audio>
         <div class="w-full bg-gray-800 rounded-full h-1 relative" @click="onProgressBarClick">
-          <div class="bg-white h-1 rounded-full" :style="{ width: progress + '%' }"></div>
-          <div class="absolute progress-dot top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 bg-white w-4 h-4 rounded-full" :style="{ left: calcProgressDotPosition }"></div>
+          <div class="bg-dooplerr-purple-light h-1 rounded-full" :style="{ width: progress + '%' }"></div>
+          <div class="absolute progress-dot top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 bg-dooplerr-purple-light w-4 h-4 rounded-full" :style="{ left: calcProgressDotPosition }"></div>
         </div>
-        <div class="flex justify-center mt-4">
-          <button @click="togglePlayPause" class="text-white" aria-label="Lecture ou pause de l'épisode">
-            <svg v-if="isPlaying" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+        <div class="flex justify-center items-center mt-12 text-white gap-10">
+          <button><Icon name="material-symbols:skip-previous-rounded" size="35" /></button>
+          <button @click="togglePlayPause" class="text-white border-4 rounded-full border-white p-2" aria-label="Lecture ou pause de l'épisode">
+            <svg v-if="isPlaying" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">
               <path fill="currentColor" d="M14 19V5h4v14zm-8 0V5h4v14z" />
             </svg>
 
-            <svg v-else xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">
               <path fill="currentColor" d="M8 19V5l11 7z" />
             </svg>
           </button>
+          <button><Icon name="material-symbols:skip-next-rounded" size="35" /></button>
+        </div>
+        <div class="flex justify-between w-full text-white mt-8">
+          <button><Icon name="ic:outline-speaker" size="30" /></button>
+          <button><Icon name="material-symbols:ios-share-rounded" size="30" /></button>
         </div>
       </div>
-      <div class="px-8">
+      <NuxtLink :to="`/podcasts/` + episode.Podcasts[0].id" class="px-8 pt-14 flex text-white">
+        <img :src="episode.Podcasts[0].thumbnail_path" class="rounded-lg bg-gray-300 me-8" width="90" height="90" style="min-width: 90px; min-height: 90px; max-height: 90px; max-width: 90px; object-fit: cover;" />
+        <div class="flex flex-col justify-center">
+          <h3 class="text-xl font-medium italic">{{ episode.Podcasts[0].title }}</h3>
+          <h4>{{ description }}</h4>
+          <div class="flex items-center">
+            <span class="font-thin">5 K abonnés</span>
+          </div>
+        </div>
+        <div class="ml-auto">
+          <Icon name="material-symbols:notifications-active-outline-rounded" size="30" />
+        </div>
+      </NuxtLink>
+      <div class="px-8 pt-8">
         <div :class="{ 'max-h-full': showFullDescription }" class="text-lg text-black mt-2 description-box bg-[#6C6A88] p-2 mb-5 rounded-md transition-all duration-300 ease-in-out">
-          <p class="text-white">Il y a {{ timeSince(episode.Podcasts[0].createdAt) }}</p>
-          <p :class="{ 'line-clamp': !showFullDescription }">{{ episode.Podcasts[0].description }}</p>
+          <p class="text-white italic font-medium">Il y a {{ timeSince(episode.Podcasts[0].createdAt) }}</p>
+          <p :class="{ 'line-clamp': !showFullDescription }" class="font-medium py-4">{{ episode.Podcasts[0].description }}</p>
           <button v-if="!showFullDescription" @click="showFullDescription = true" class="text-white mt-2 block">Voir plus</button>
           <button v-if="showFullDescription" @click="showFullDescription = false" class="text-white mt-2 block">Voir moins</button>
         </div>
       </div>
       
       <!-- Section des commentaires -->
-      <div class="mt-15 px-8" v-if="episode.Comments">
+      <div class="pt-6 px-8" v-if="episode.Comments">
         <h2 class="text-base font-semibold italic text-white mb-4">
           <!-- Nombre de commentaire avec ou sans s à commentaire -->
           {{ episode.Comments.length > 1 ? episode.Comments.length + ' commentaires' : episode.Comments.length + ' commentaire' }}
@@ -88,12 +107,12 @@
               </div>
             </div>
 
-            <div class="flex flex-col gap-2 pt-1">
+            <div class="flex flex-col gap-2 pt-1 w-full">
               <div class="flex gap-2 items-baseline">
                 <h3 class="text-white font-semibold" v-if="comment.Users && comment.Users.length > 0">{{ comment.Users[0].username }}</h3>
                 <span class="text-gray-400 text-sm">{{ formatDate(comment.date) }}</span>
               </div>
-              <p class="text-white">{{ comment.text }}</p>
+              <p class="text-white overflow-wrap-break-word pe-16">{{ comment.text }}</p>
             </div>
           </div>
           <!-- Pas de commentaires disponibles pour ce podcast -->
@@ -353,5 +372,9 @@ const randomColor = computed(() => {
 
 .max-h-full {
   max-height: 100%;
+}
+
+.overflow-wrap-break-word {
+  overflow-wrap: break-word;
 }
 </style>
