@@ -26,7 +26,7 @@
           style="box-shadow: none;">
       </div>
       <div class="mb-4">
-        <label class="block text-white font-medium text-lg" for="file">Fichier <span class="text-sm font-normal">(obligatoire)</span></label>
+        <label class="block text-white font-medium text-lg" for="file">Fichier .mp3 <span class="text-sm font-normal">(obligatoire)</span></label>
         <input
           class="bg-transparent shadow-none border-none appearance-none w-full py-2 leading-tight px-0 text-sm font-thin"
           id="file" type="file" @change="handleFileChange" required
