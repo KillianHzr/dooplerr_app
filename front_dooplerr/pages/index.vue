@@ -39,7 +39,7 @@ const { getEpisodes } = useEpisodes();
 
 const podcasts = ref([]);
 const episodes = ref([]);
-const isLoading = ref(true); // Ajout de la référence pour l'état de chargement
+const isLoading = ref(true);
 
 onMounted(async () => {
   try {
@@ -48,7 +48,7 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error fetching podcasts or episodes:', error);
   } finally {
-    isLoading.value = false; // Fin du chargement
+    isLoading.value = false;
   }
 });
 </script>
@@ -57,7 +57,7 @@ onMounted(async () => {
 .spinner-border {
   width: 3rem;
   height: 3rem;
-  border: 0.4em solid currentColor;
+  border: 0.2em solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
   animation: spinner-border .75s linear infinite;

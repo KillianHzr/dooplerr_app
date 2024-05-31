@@ -22,7 +22,7 @@
         <div v-if="episode.Podcasts && episode.Podcasts.length > 0" class="img-podcast w-full max-w-[340px] aspect-square rounded-md">
           <img :src="episode.Podcasts[0].thumbnail_path" 
           :alt="episode.Podcasts[0].title + ` ` + episode.title"
-           class="rounded-md w-full h-full object-cover aspect-square">
+           class="rounded-lg w-full h-full object-cover aspect-square">
         </div>
         <div class="w-full flex my-8 justify-between">
           <div class="flex flex-col">
@@ -349,7 +349,7 @@ const randomColor = computed(() => {
 .spinner-border {
   width: 3rem;
   height: 3rem;
-  border: 0.4em solid currentColor;
+  border: 0.2em solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
   animation: spinner-border .75s linear infinite;

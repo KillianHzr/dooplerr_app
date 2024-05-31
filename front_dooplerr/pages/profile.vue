@@ -125,7 +125,7 @@ onMounted(() => {
     localStorage.removeItem('podcastAdded');
     setTimeout(() => {
       showSuccessAlert.value = false;
-    }, 5000);
+    }, 3000);
   }
 });
 </script>
@@ -138,7 +138,7 @@ onMounted(() => {
 .spinner-border {
   width: 3rem;
   height: 3rem;
-  border: 0.4em solid currentColor;
+  border: 0.2em solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
   animation: spinner-border .75s linear infinite;

@@ -31,11 +31,11 @@
     <div v-else>
       <!-- Contenu du podcast -->
       <div class="flex flex-col md:flex-row justify-center items-center md:items-start px-6">
-        <div class="img-podcast w-full md:w-1/4 md:mr-6 aspect-square" :style="{ backgroundImage: 'url(' + podcast.thumbnail_path + ')' }" :alt="`Podcast - ${podcast.title}`" style="max-width: 350px; max-height: 350px;"></div>
-        <div class="md:w-3/4">
-          <h1 class="text-4xl font-bold text-white mt-4">{{ podcast.title }}</h1>
-          <div :class="{ 'max-h-full': showFullDescription }" class="text-lg text-black mt-2 description-box bg-[#6C6A88] p-2 rounded-md transition-all duration-300 ease-in-out">
-            <p :class="{ 'line-clamp': !showFullDescription }" class="font-medium pb-4">{{ podcast.description }}</p>
+        <div class="img-podcast w-full md:w-1/4 md:mr-6 aspect-square rounded-lg" :style="{ backgroundImage: 'url(' + podcast.thumbnail_path + ')' }" :alt="`Podcast - ${podcast.title}`" style="max-width: 350px; max-height: 350px;"></div>
+        <div class="w-full md:w-3/4">
+          <h1 class="w-full text-center text-4xl font-bold text-white mt-4">{{ podcast.title }}</h1>
+          <div :class="{ 'max-h-full': showFullDescription }" class="w-full text-lg text-white mt-2 description-box bg-[#6C6A88] p-2 rounded-md transition-all duration-300 ease-in-out">
+            <p :class="{ 'line-clamp': !showFullDescription }" class="font-medium pb-4 opacity-85">{{ podcast.description }}</p>
             <button v-if="!showFullDescription" @click="showFullDescription = true" class="text-white mt-2 block">Voir plus</button>
             <button v-if="showFullDescription" @click="showFullDescription = false" class="text-white mt-2 block">Voir moins</button>
           </div>
@@ -168,14 +168,14 @@ onMounted(async () => {
     localStorage.removeItem('podcastEdited');
     setTimeout(() => {
       showSuccessAlert.value = false;
-    }, 5000);
+    }, 3000);
   }
   if (localStorage.getItem('episodeAdded') === 'true') {
     showSuccessAlertEpisode.value = true;
     localStorage.removeItem('episodeAdded');
     setTimeout(() => {
       showSuccessAlertEpisode.value = false;
-    }, 5000);
+    }, 3000);
   }
 
   if (user.value.id === podcast.value.Users[0].id) {
@@ -195,7 +195,7 @@ const filteredEpisodes = computed(() => podcastEpisodes.value);
 .spinner-border {
   width: 3rem;
   height: 3rem;
-  border: 0.4em solid currentColor;
+  border: 0.2em solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
   animation: spinner-border .75s linear infinite;

@@ -151,21 +151,19 @@ router.get("/categories", async (req, res) => {
 router.get("/categories/:id/podcasts", async (req, res) => {
   try {
     const category = await Category.findByPk(req.params.id, {
-      include: Podcast,
+      include: {
+        model: Podcast,
+      },
     });
 
     if (!category) {
-      return res
-        .status(404)
-        .json({ error: "La catégorie spécifiée n'existe pas." });
+      return res.status(404).json({ error: "La catégorie spécifiée n'existe pas." });
     }
 
-    res.json(category);
+    res.json(category.Podcasts);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "Erreur lors de la récupération des podcasts." });
+    res.status(500).json({ error: "Erreur lors de la récupération des podcasts." });
   }
 });
 

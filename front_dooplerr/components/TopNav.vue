@@ -1,5 +1,5 @@
 <template>
-    <section class="w-full py-10 flex flex-col">
+    <section class="w-full pt-10 pb-5 flex flex-col">
         <div class="flex justify-between">
             <NuxtLink to="/" active-class="active-link" aria-label="Accueil">
                 <img src="~/assets/img/logo-dooplerr.png">

@@ -55,17 +55,19 @@
         <h2 class="text-normal uppercase font-bold text-white mb-4 italic">
           Toutes les catégories
         </h2>
-        <div class="grid grid-cols-2 gap-6 gap-x-10 pb-10">
+        <div class="grid grid-cols-2 gap-6 pb-10">
           <div
-            v-for="category in categories"
+            v-for="category in allCategories"
             :key="category.name"
             :style="{ backgroundColor: category.color }"
             class="px-2 py-1 flex flex-col text-white rounded-xl relative"
           >
-            <h3 class="text-2xl font-medium italic pb-10">{{ category.name }}</h3>
-            <div class="w-full flex justify-center absolute bottom-0 left-0">
-              <img src="~/assets/img/categories_bg.png" class="w-11/12" style="object-fit: cover;" />
-            </div>
+            <NuxtLink :to="`/podcasts/categories/${category.id}?color=${encodeURIComponent(category.color)}`">
+              <h3 class="text-2xl font-medium italic pb-10">{{ category.name }}</h3>
+              <div class="w-full flex justify-center absolute bottom-0 left-0">
+                <img src="~/assets/img/categories_bg.png" class="w-11/12" style="object-fit: cover;" />
+              </div>
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -95,8 +97,11 @@
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { usePodcasts } from '~/composables/usePodcasts';
+import { useCategories } from '~/composables/useCategories';
 
 const { getPodcasts } = usePodcasts();
+const { getCategories } = useCategories();
+
 const podcasts = ref([]);
 const searchQuery = ref('');
 const filteredPodcasts = ref([]);
@@ -104,20 +109,13 @@ const route = useRoute();
 const searchInput = ref(null);
 const isLoading = ref(true);
 
-const categories = ref([
-  { name: 'Politique', color: '#8953C5' },
-  { name: 'Histoires', color: '#C55353' },
-  { name: 'Société', color: '#4972C3' },
-  { name: 'Sexualité', color: '#28BC51' },
-  { name: 'Films & Séries', color: '#D4498C' },
-  { name: 'Arts & Culture', color: '#EEBA00' },
-  { name: 'Sport', color: '#2939CA' },
-  { name: 'Faits divers', color: '#14BDBD' },
-  { name: 'Divertissement', color: '#DB62F9' },
-  { name: 'Actualités', color: '#5B15A1' },
-  { name: 'Business', color: '#910862' },
-  { name: 'Faits divers', color: '#AA0B3B' },
-]);
+const categoryColors = [
+  '#8953C5', '#C55353', '#4972C3', '#28BC51', '#D4498C', '#EEBA00',
+  '#2939CA', '#14BDBD', '#DB62F9', '#5B15A1', '#910862', '#AA0B3B'
+];
+
+const categories = ref([]);
+const allCategories = ref([]);
 
 onMounted(async () => {
   try {
@@ -125,8 +123,15 @@ onMounted(async () => {
     podcasts.value = allPodcasts.filter(podcast => podcast.public);
     searchQuery.value = route.query.search || '';
     filterPodcasts();
+
+    const realCategories = await getCategories();
+    categories.value = realCategories.map((category, index) => ({
+      ...category,
+      color: categoryColors[index % categoryColors.length]
+    }));
+    allCategories.value = categories.value;
   } catch (error) {
-    console.error('Error fetching podcasts:', error);
+    console.error('Error fetching podcasts or categories:', error);
   } finally {
     isLoading.value = false;
   }
@@ -155,7 +160,7 @@ watch([searchQuery, () => route.query.search], () => {
 .spinner-border {
   width: 3rem;
   height: 3rem;
-  border: 0.4em solid currentColor;
+  border: 0.2em solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
   animation: spinner-border .75s linear infinite;
@@ -163,5 +168,15 @@ watch([searchQuery, () => route.query.search], () => {
 
 @keyframes spinner-border {
   to { transform: rotate(360deg); }
+}
+
+input::placeholder {
+  color: #706D92;
+  font-style: italic;
+  line-height: normal;
+}
+
+input:focus {
+  box-shadow: none !important;
 }
 </style>

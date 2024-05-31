@@ -14,7 +14,18 @@ export const useCategories = () => {
     }
   }
 
+  async function getCategoryPodcasts(categoryId: string) {
+    try {
+      const response = await axios.get(`${urlBase}/categories/${categoryId}/podcasts`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching podcasts for category ${categoryId}:`, error);
+      throw error;
+    }
+  }
+
   return {
     getCategories,
+    getCategoryPodcasts,
   };
 };

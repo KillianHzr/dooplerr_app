@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen flex flex-col justify-center items-center text-white">
       <div class="py-12 px-5 text-center">
-        <h2 class="text-3xl italic">Bienvenue sur Dooplerr</h2>
+        <h2 class="text-3xl italic font-bold">Bienvenue sur Dooplerr</h2>
         <p class="mt-2 text-gray-400 max-w-md mx-auto">
           Connecte-toi à ton compte ou crée un nouveau compte pour accéder à nos services.
         </p>
