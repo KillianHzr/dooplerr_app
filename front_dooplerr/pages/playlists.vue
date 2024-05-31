@@ -26,6 +26,8 @@
               <Icon name="mage:user-check" size="30" />
               <h3 class="font-medium italic text-lg">Podcast likés</h3>              
             </div>
+            <h3 class="text-2xl italic font-medium">Envie de découvrir de nouveaux podcasts ?</h3>
+            <NuxtLink to="/podcasts" class="italic mb-2 px-5 pt-1 pb-2 bg-dooplerr-purple-dark border border-white rounded-full">Voir les podcasts</NuxtLink>
           </div>
         </div>
       </section>

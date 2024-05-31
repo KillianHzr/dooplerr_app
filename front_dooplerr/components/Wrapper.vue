@@ -7,7 +7,7 @@
     <div
       v-if="!isAtStart"
       :class="{ active: !isAtStart }"
-      class="absolute arrow left-2 top-0 bottom-0 flex items-center justify-center z-50"
+      class="absolute arrow left-[-2rem] top-0 bottom-0 flex items-center justify-center z-50"
     >
       <button @click="scrollLeft">
         <svg
@@ -30,7 +30,7 @@
 
     <!-- Flèche de défilement vers la droite -->
     <div
-      class="absolute arrow right-2 top-0 bottom-0 flex items-center justify-center z-50"
+      class="absolute arrow right-[-2rem] top-0 bottom-0 flex items-center justify-center z-50"
     >
       <button @click="scrollRight">
         <svg
@@ -95,19 +95,33 @@ const scrollLeft = () => {
 
 <style>
 /* Gradient right */
-.wrapper-container::after {
+/* .wrapper-container::after {
   content: "";
   position: absolute;
   top: 0;
-  right: 0;
+  right: -2rem;
   bottom: 0;
   width: 5rem;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.3), transparent);
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.5), transparent);
   z-index: 10;
   opacity: 0;
   transition: all 0.3s ease-in-out;
   height: 100%;
 }
+
+.wrapper-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -2rem;
+  bottom: 0;
+  width: 5rem;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
+  z-index: 10;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+} */
 
 .wrapper-container:hover::before,
 .wrapper-container:hover::after {
