@@ -30,8 +30,8 @@
 
     <div v-else>
       <!-- Contenu du podcast -->
-      <div class="flex flex-col md:flex-row justify-center items-center md:items-start px-6">
-        <div class="img-podcast w-full md:w-1/4 md:mr-6 aspect-square rounded-lg" :style="{ backgroundImage: 'url(' + podcast.thumbnail_path + ')' }" :alt="`Podcast - ${podcast.title}`" style="max-width: 350px; max-height: 350px;"></div>
+      <div class="flex flex-col justify-center items-center px-6">
+        <div class="img-podcast w-full md:w-2/4 aspect-square rounded-lg" :style="{ backgroundImage: 'url(' + podcast.thumbnail_path + ')' }" :alt="`Podcast - ${podcast.title}`" style="max-width: 350px; max-height: 350px;"></div>
         <div class="w-full md:w-3/4">
           <h1 class="w-full text-center text-4xl font-bold text-white mt-4">{{ podcast.title }}</h1>
           <div :class="{ 'max-h-full': showFullDescription }" class="w-full text-lg text-white mt-2 description-box bg-[#6C6A88] p-2 rounded-md transition-all duration-300 ease-in-out">
