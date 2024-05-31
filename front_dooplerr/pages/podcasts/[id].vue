@@ -30,12 +30,15 @@
 
     <div v-else>
       <!-- Contenu du podcast -->
-      <div class="flex flex-col md:flex-row justify-center items-center">
-        <div class="img-podcast w-56 h-56 md:mr-6" :style="{ backgroundImage: 'url(' + podcast.thumbnail_path + ')' }">
-        </div>
-        <div>
+      <div class="flex flex-col md:flex-row justify-center items-center md:items-start px-6">
+        <div class="img-podcast w-full md:w-1/4 h-64 md:mr-6" :style="{ backgroundImage: 'url(' + podcast.thumbnail_path + ')' }"></div>
+        <div class="md:w-3/4">
           <h1 class="text-4xl font-bold text-white mt-4">{{ podcast.title }}</h1>
-          <p class="text-lg text-white mt-2">{{ podcast.description }}</p>
+          <div :class="{ 'max-h-full': showFullDescription }" class="text-lg text-black mt-2 description-box bg-[#6C6A88] p-2 rounded-md transition-all duration-300 ease-in-out">
+            <p :class="{ 'line-clamp': !showFullDescription }">{{ podcast.description }}</p>
+            <button v-if="!showFullDescription" @click="showFullDescription = true" class="text-white mt-2 block">Voir plus</button>
+            <button v-if="showFullDescription" @click="showFullDescription = false" class="text-white mt-2 block">Voir moins</button>
+          </div>
         </div>
       </div>
 
@@ -106,6 +109,7 @@ const { getEpisodes, getPodcastById } = useEpisodes();
 const { deletePodcastById } = usePodcasts();
 const showSuccessAlert = ref(false);
 const showSuccessAlertEpisode = ref(false);
+const showFullDescription = ref(false);
 
 const podcast = ref({});
 const podcastEpisodes = ref([]);
@@ -183,5 +187,25 @@ const filteredEpisodes = computed(() => podcastEpisodes.value);
 
 @keyframes spinner-border {
   to { transform: rotate(360deg); }
+}
+
+.description-box {
+  transition: max-height 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.max-h-20 {
+  max-height: 5rem;
+}
+
+.max-h-full {
+  max-height: 100%;
 }
 </style>

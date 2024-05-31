@@ -23,7 +23,11 @@
           <img :src="episode.Podcasts[0].thumbnail_path" alt="Image de l'épisode" class="rounded-md w-full h-full object-cover aspect-square">
         </div>
         <div class="w-full flex my-8 justify-between">
-          <h1 class="text-lg italic text-white">{{ episode.title }}</h1>
+          <div class="flex flex-col">
+            <h2 class="text-2xl font-semibold text-white">{{ episode.Podcasts && episode.Podcasts.length > 0 ? episode.Podcasts[0].title : '' }}</h2>
+            <h1 class="text-lg italic text-white">"{{ episode.title }}"</h1>
+          </div>
+          
           <!-- Bouton de like -->
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21.29l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.47L12 21.29z" />
@@ -50,7 +54,15 @@
           </button>
         </div>
       </div>
-
+      <div class="px-8">
+        <div :class="{ 'max-h-full': showFullDescription }" class="text-lg text-black mt-2 description-box bg-[#6C6A88] p-2 mb-5 rounded-md transition-all duration-300 ease-in-out">
+          <p class="text-white">Il y a {{ timeSince(episode.Podcasts[0].createdAt) }}</p>
+          <p :class="{ 'line-clamp': !showFullDescription }">{{ episode.Podcasts[0].description }}</p>
+          <button v-if="!showFullDescription" @click="showFullDescription = true" class="text-white mt-2 block">Voir plus</button>
+          <button v-if="showFullDescription" @click="showFullDescription = false" class="text-white mt-2 block">Voir moins</button>
+        </div>
+      </div>
+      
       <!-- Section des commentaires -->
       <div class="mt-15 px-8" v-if="episode.Comments">
         <h2 class="text-base font-semibold italic text-white mb-4">
@@ -109,6 +121,8 @@ const progress = ref(0);
 const progressDotPosition = ref(0);
 const newComment = ref("");
 const isLoading = ref(true); // Ajout de la référence pour l'état de chargement
+const showSuccessAlertEpisode = ref(false);
+const showFullDescription = ref(false);
 
 const audio = ref(null);
 
@@ -183,6 +197,35 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('fr-FR', options);
 };
 
+// Calculer depuis combien de temps le podcast a été créé
+const timeSince = (date) => {
+  const now = new Date();
+  const createdDate = new Date(date);
+  const seconds = Math.floor((now - createdDate) / 1000);
+
+  let interval = seconds / 31536000;
+  if (interval > 1) {
+    return Math.floor(interval) + " ans";
+  }
+  interval = seconds / 2592000;
+  if (interval > 1) {
+    return Math.floor(interval) + " mois";
+  }
+  interval = seconds / 86400;
+  if (interval > 1) {
+    return Math.floor(interval) + " jours";
+  }
+  interval = seconds / 3600;
+  if (interval > 1) {
+    return Math.floor(interval) + " heures";
+  }
+  interval = seconds / 60;
+  if (interval > 1) {
+    return Math.floor(interval) + " minutes";
+  }
+  return Math.floor(seconds) + " secondes";
+};
+
 // Soumettre un nouveau commentaire
 const submitComment = async () => {
   if (newComment.value.trim() === "") return;
@@ -208,8 +251,6 @@ const randomColor = computed(() => {
 </script>
 
 <style scoped>
-/* Add your CSS styles here */
-
 .spinner-border {
   width: 3rem;
   height: 3rem;
@@ -221,5 +262,20 @@ const randomColor = computed(() => {
 
 @keyframes spinner-border {
   to { transform: rotate(360deg); }
+}
+
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.max-h-20 {
+  max-height: 5rem;
+}
+
+.max-h-full {
+  max-height: 100%;
 }
 </style>

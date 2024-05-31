@@ -1,5 +1,5 @@
 <template>
-  <div :class="`min-h-screen flex flex-col justify-center text-white`">
+  <div :class="`min-h-screen flex flex-col justify-center text-white mx-auto md:max-w-[600px]`">
     <div v-if="!planSelected" class="py-12 px-5">
       <div class="flex flex-col gap-4">
         <PlanCard 
@@ -66,19 +66,19 @@
           <div class="flex items-center">
             <label for="username" class="w-1/3 font-medium">Indentifiant</label>
             <input id="username" name="username" type="text" v-model="username" required
-              class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+              class="w-2/3 border-0 border-b-2 bg-transparent text-white appearance-none shadow-none outline-none focus:outline-none"
               placeholder="Entrez votre nom d'utilisateur">
           </div>
           <div class="flex items-center">
             <label for="password" class="w-1/3 font-medium">Mot de passe</label>
             <input id="password" name="password" type="password" v-model="password" required
-              class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+              class="w-2/3 border-0 border-b-2 bg-transparent text-white appearance-none shadow-none outline-none focus:outline-none"
               placeholder="Entrez votre mot de passe">
           </div>
           <div class="flex items-center">
             <label for="confirmPassword" class="w-1/3 font-medium">Confirmation de mot de passe</label>
             <input id="confirmPassword" name="confirmPassword" type="password" v-model="confirmPassword" required
-              class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+              class="w-2/3 border-0 border-b-2 bg-transparent text-white appearance-none shadow-none outline-none focus:outline-none"
               placeholder="Confirmez votre mot de passe">
           </div>
           <p v-if="error" class="text-red-500">{{ error }}</p>
@@ -87,19 +87,19 @@
           <div class="flex items-center">
             <label for="email" class="w-1/3 font-medium">Adresse e-mail</label>
             <input id="email" name="email" type="email" v-model="email" required
-              class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+              class="w-2/3 border-0 border-b-2 bg-transparent text-white appearance-none shadow-none outline-none focus:outline-none"
               placeholder="Entrez votre adresse e-mail">
           </div>
           <div class="flex items-center">
             <label for="firstname" class="w-1/3 font-medium">Prénom</label>
             <input id="firstname" name="firstname" type="text" v-model="firstname" required
-              class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+              class="w-2/3 border-0 border-b-2 bg-transparent text-white appearance-none shadow-none outline-none focus:outline-none"
               placeholder="Entrez votre prénom">
           </div>
           <div class="flex items-center">
             <label for="lastname" class="w-1/3 font-medium">Nom de famille</label>
             <input id="lastname" name="lastname" type="text" v-model="lastname" required
-              class="w-2/3 appearance-none text-black py-1 px-3 rounded-dooplerr"
+              class="w-2/3 border-0 border-b-2 bg-transparent text-white appearance-none shadow-none outline-none focus:outline-none"
               placeholder="Entrez votre nom de famille">
           </div>
         </div>
