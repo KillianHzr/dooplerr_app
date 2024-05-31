@@ -29,7 +29,14 @@
         </div>
       </div>
     </section>
-    <div class="container mx-auto">
+    
+    <section v-if="isLoading" class="flex justify-center items-center py-10">
+      <div class="spinner-border text-dooplerr-grey-purple" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </section>
+
+    <div v-else class="container mx-auto">
       <h2 class="text-xl font-bold text-white mb-4 italic">
         TOUS LES PODCASTS
       </h2>
@@ -61,12 +68,19 @@ const searchQuery = ref('');
 const filteredPodcasts = ref([]);
 const route = useRoute();
 const searchInput = ref(null); // Define a ref to the search input
+const isLoading = ref(true); // Ajout de la référence pour l'état de chargement
 
 onMounted(async () => {
-  const allPodcasts = await getPodcasts();
-  podcasts.value = allPodcasts.filter(podcast => podcast.public);
-  searchQuery.value = route.query.search || '';
-  filterPodcasts();
+  try {
+    const allPodcasts = await getPodcasts();
+    podcasts.value = allPodcasts.filter(podcast => podcast.public);
+    searchQuery.value = route.query.search || '';
+    filterPodcasts();
+  } catch (error) {
+    console.error('Error fetching podcasts:', error);
+  } finally {
+    isLoading.value = false; // Fin du chargement
+  }
 
   // Focus the input after the component is mounted
   if (searchInput.value) {
@@ -88,3 +102,18 @@ watch([searchQuery, () => route.query.search], () => {
   filterPodcasts();
 });
 </script>
+
+<style scoped>
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border: 0.4em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-border .75s linear infinite;
+}
+
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
+}
+</style>
