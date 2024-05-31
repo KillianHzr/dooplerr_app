@@ -5,7 +5,7 @@
         <button @click="$router.back()">
           <Icon name="material-symbols-light:arrow-back-ios-rounded" size="27" />
         </button>
-        <div class="flex gap-5 items-center justify-center">
+        <div v-if="isOwner" class="flex gap-5 items-center justify-center">
           <button @click="showDeleteConfirmation = true" class="flex items-center justify-center border border-dooplerr-grey-purple rounded-full text-xs py-1 px-4">
             <Icon name="material-symbols:delete-outline-rounded" size="20" />
           </button>
@@ -51,7 +51,7 @@
         <div class="flex flex-col gap-2 mt-10">
           <CardEpisode v-for="episode in filteredEpisodes" :key="episode.id" :episode="episode" />
         </div>
-        <div class="w-full flex justify-center mt-10">
+        <div v-if="isOwner" class="w-full flex justify-center mt-10">
           <button class="italic mb-2 px-5 pt-1 pb-2 bg-dooplerr-purple-dark border border-white rounded-full" @click="showAddEpisodeModal = true">+ Ajouter un épisode</button>
         </div>
       </div>
@@ -61,7 +61,7 @@
           <h2 class="text-2xl italic pt-10 pb-6 font-medium">Mes épisodes</h2>
           <div class="flex flex-col w-full justify-center items-center">
             <p class="text-dooplerr-grey-purple font-medium pb-6">Aucun épisode pour le moment...</p>
-            <div class="flex flex-col items-center py-20 w-3/4 border-dashed-custom rounded-xl">
+            <div v-if="isOwner" class="flex flex-col items-center py-20 w-3/4 border-dashed-custom rounded-xl">
               <button class="italic mb-2 px-5 pt-1 pb-2 bg-dooplerr-purple-dark border border-white rounded-full" @click="showAddEpisodeModal = true">+ Ajouter un épisode</button>
               <span class="italic text-sm text-dooplerr-grey-purple">Glisser un média</span>
             </div>
@@ -103,6 +103,7 @@ const showSuccessAlert = ref(false);
 const showSuccessAlertEpisode = ref(false);
 const showFullDescription = ref(false);
 
+const user = inject('user');
 const podcast = ref({});
 const podcastEpisodes = ref([]);
 const showEditModal = ref(false);
@@ -110,6 +111,7 @@ const showAddEpisodeModal = ref(false);
 const showDeleteConfirmation = ref(false);
 const isLoading = ref(true);
 const router = useRouter();
+const isOwner = ref(false);
 
 // Récupérer les détails du podcast
 async function fetchPodcastDetails() {
@@ -174,6 +176,10 @@ onMounted(async () => {
     setTimeout(() => {
       showSuccessAlertEpisode.value = false;
     }, 5000);
+  }
+
+  if (user.value.id === podcast.value.Users[0].id) {
+    isOwner.value = true;
   }
 });
 

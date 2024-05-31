@@ -18,7 +18,13 @@ router.get("/podcasts", async (req, res) => {
 
 router.get("/podcasts/:id", async (req, res) => {
   const podcast = await Podcast.findByPk(req.params.id, {
-    include: Episode,
+    include: [
+      Episode,
+      {
+        model: User,
+        attributes: ['id', 'username', 'image_path']
+      }
+    ],
   });
   res.json(podcast);
 });
