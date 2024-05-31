@@ -46,7 +46,7 @@
       <div class="mt-10 px-6" v-if="filteredEpisodes.length">
         <div class="flex justify-between w-full">
           <h2 class="text-3xl font-bold text-white">Les épisodes</h2>
-          <button class="text-4xl font-thin" @click="showAddEpisodeModal = true">+</button>
+          <button v-if="isOwner" class="text-4xl font-thin" @click="showAddEpisodeModal = true">+</button>
         </div>
         <div class="flex flex-col gap-2 mt-10">
           <CardEpisode v-for="episode in filteredEpisodes" :key="episode.id" :episode="episode" />
