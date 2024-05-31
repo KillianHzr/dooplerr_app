@@ -31,34 +31,36 @@ export default defineNuxtConfig({
   pwa: {
     manifest: {
       name: "Dooplerr",
-      short_name: "Dooplerr",
-      description: "Dooplerr",
-      theme_color: "#060511",
+      short_name: "dooplerr",
+      description: "Dooplerr - La nouvelle plateforme de podcasts !",
       lang: "fr",
+      theme_color: "#0D0B21",
       icons: [
         {
-          src: "/pwa-192x192.png",
-          sizes: "192x192",
-          type: "image/png",
+          src: 'pwa-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+          purpose: 'any',
         },
         {
-          src: "/pwa-512x512.png",
-          sizes: "512x512",
-          type: "image/png",
+          src: 'pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any',
         },
         {
-          src: "android-launchericon-512-512.png",
-          sizes: "512x512",
-          type: "image/png",
-          purpose: "any maskable",
+          src: 'pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable',
         },
       ],
     },
     workbox: {
-      globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
     },
     injectManifest: {
-      globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
     },
     client: {
       installPrompt: true,
