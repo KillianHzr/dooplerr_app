@@ -35,7 +35,7 @@
         <div class="md:w-3/4">
           <h1 class="text-4xl font-bold text-white mt-4">{{ podcast.title }}</h1>
           <div :class="{ 'max-h-full': showFullDescription }" class="text-lg text-black mt-2 description-box bg-[#6C6A88] p-2 rounded-md transition-all duration-300 ease-in-out">
-            <p :class="{ 'line-clamp': !showFullDescription }">{{ podcast.description }}</p>
+            <p :class="{ 'line-clamp': !showFullDescription }" class="font-medium pb-4">{{ podcast.description }}</p>
             <button v-if="!showFullDescription" @click="showFullDescription = true" class="text-white mt-2 block">Voir plus</button>
             <button v-if="showFullDescription" @click="showFullDescription = false" class="text-white mt-2 block">Voir moins</button>
           </div>

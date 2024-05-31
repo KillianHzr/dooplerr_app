@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <div class="ml-auto">
+    <div class="ml-auto" v-if="!hideVisibility">
       <Icon v-if="isPublic" name="ph:microphone" size="20" />
       <Icon v-else name="ph:microphone-slash" size="20" />
     </div>
@@ -51,6 +51,10 @@ defineProps({
   isPublic: {
     type: Boolean,
     required: true
+  },
+  hideVisibility: {
+    type: Boolean,
+    required: false
   }
 });
 </script>
