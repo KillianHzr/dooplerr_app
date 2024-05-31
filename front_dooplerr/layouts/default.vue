@@ -2,17 +2,8 @@
   <div>
     <NuxtPwaManifest />
     <div class="min-h-screen relative">
-      <div id="auth-container"
-        style="position: fixed; z-index: 9999; display: flex; align-items: center; width: 100%; justify-content: center">
-        <div id="auth-indicator"
-          style="width: 20px; height: 20px; border-radius: 100px; margin-right: 10px; background-color: red;"></div>
-        <button v-if="!isAuthenticated" style="margin-right: 10px;">
-          <NuxtLink to="/auth/login">Login</NuxtLink>
-        </button>
-        <button v-if="isAuthenticated" @click="logout">Logout</button>
-      </div>
 
-      <section class="pb-1">
+      <section class="pb-16">
         <slot />
       </section>
 
@@ -65,13 +56,6 @@ const checkAuth = async () => {
   if (indicator) {
     indicator.style.backgroundColor = token ? 'green' : 'red';
   }
-};
-
-const logout = () => {
-  localStorage.removeItem('token');
-  isAuthenticated.value = false;
-  user.value = {};
-  router.push('/auth');
 };
 
 onMounted(() => {

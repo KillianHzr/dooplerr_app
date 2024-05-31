@@ -1,7 +1,10 @@
 <template>
     <div class="container max-w-screen-sm mx-auto mb-28">
         <!-- Titre de l'épisode -->
-        <div class="flex justify-around h-32 items-center">
+        <div class="flex justify-around my-10 px-8 items-center relative w-full">
+            <button @click="$router.back()" class="text-white absolute left-0 top-0 px-8">
+                <Icon name="material-symbols-light:arrow-back-ios-rounded" size="27" />
+            </button>
             <h3 class="text-base md:text-xl font-bold text-white">
                 {{ episode.title }}
             </h3>
@@ -47,7 +50,7 @@
         </div>
 
         <!-- Section des commentaires -->
-        <div class="mt-15 px-8" v-if="episode.Comments">
+        <div class="mt-15 px-5" v-if="episode.Comments">
             <h2 class="text-base font-semibold italic text-white mb-4">
                 <!-- Nombre de commentaire avec ou sans s à commentaire -->
                 {{ episode.Comments.length > 1 ? episode.Comments.length + ' commentaires' :

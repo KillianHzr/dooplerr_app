@@ -10,7 +10,7 @@ export const useEpisodes = () => {
       return response.data;
     } catch (error) {
       console.error("Error fetching episodes:", error);
-      throw error; // Renvoyer l'erreur pour gérer les erreurs dans le composant appelant
+      throw error;
     }
   }
 
@@ -24,8 +24,36 @@ export const useEpisodes = () => {
     }
   }
 
+  async function getPodcastById(id: string) {
+    try {
+      const response = await axios.get(`${urlBase}/podcasts/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching podcast by id:", error);
+      throw error;
+    }
+  }
+
+  async function addEpisode(formData: FormData) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(`${urlBase}/admin/episodes`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error adding episode:", error);
+      throw error;
+    }
+  }
+
   return {
     getEpisodes,
     getEpisodeById,
+    getPodcastById,
+    addEpisode,
   };
 };

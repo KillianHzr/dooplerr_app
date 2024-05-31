@@ -50,10 +50,27 @@ export const usePodcasts = () => {
     }
   }
 
+  async function updatePodcast(id: string, formData: FormData) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.patch(`${urlBase}/admin/podcasts/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating podcast:", error);
+      throw error;
+    }
+  }
+
   return {
     getPodcasts,
     getPodcastEpisodes,
     getUserPodcasts,
     addPodcast,
+    updatePodcast,
   };
 };
