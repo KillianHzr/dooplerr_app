@@ -10,13 +10,13 @@
         class="w-full fixed py-2 px-8 bg-dooplerr-black bottom-0 left-0 flex justify-between"
       >
         <div class="flex justify-between mx-auto w-full max-w-[600px]">
-          <NuxtLink to="/" active-class="active-link">
+          <NuxtLink to="/" active-class="active-link" aria-label="Accueil">
             <Icon name="material-symbols:home-outline-rounded" size="38" />
           </NuxtLink>
-          <NuxtLink to="/podcasts" active-class="active-link">
+          <NuxtLink to="/podcasts" active-class="active-link" aria-label="Posdcasts">
             <Icon name="mingcute:search-line" size="38" />
           </NuxtLink>
-          <NuxtLink to="/playlists" active-class="active-link">
+          <NuxtLink to="/playlists" active-class="active-link" aria-label="Playlists">
             <Icon name="solar:layers-minimalistic-linear" size="38" />
           </NuxtLink>
         </div>
@@ -90,6 +90,13 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+useHead({
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} - Dooplerr - La plateforme de podcast interactive` : "Dooplerr - La plateforme de podcast interactive";
+  },
+})
+
 </script>
 
 <style scoped>

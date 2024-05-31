@@ -20,7 +20,9 @@
       <!-- Image de l'épisode -->
       <div class="flex flex-col justify-center items-center px-8">
         <div v-if="episode.Podcasts && episode.Podcasts.length > 0" class="img-podcast w-full max-w-[340px] aspect-square rounded-md">
-          <img :src="episode.Podcasts[0].thumbnail_path" alt="Image de l'épisode" class="rounded-md w-full h-full object-cover aspect-square">
+          <img :src="episode.Podcasts[0].thumbnail_path" 
+          :alt="episode.Podcasts[0].title + ` ` + episode.title"
+           class="rounded-md w-full h-full object-cover aspect-square">
         </div>
         <div class="w-full flex my-8 justify-between">
           <div class="flex flex-col">
@@ -37,13 +39,13 @@
 
       <!-- Lecteur audio -->
       <div v-if="episode" class="w-full flex flex-col items-center px-8">
-        <audio ref="audio" :src="episode.file_path" preload="metadata"></audio>
+        <audio ref="audio" :src="episode.file_path" preload="metadata" :alt="episode.title"></audio>
         <div class="w-full bg-gray-800 rounded-full h-1 relative" @click="onProgressBarClick">
           <div class="bg-white h-1 rounded-full" :style="{ width: progress + '%' }"></div>
           <div class="absolute progress-dot top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 bg-white w-4 h-4 rounded-full" :style="{ left: calcProgressDotPosition }"></div>
         </div>
         <div class="flex justify-center mt-4">
-          <button @click="togglePlayPause" class="text-white">
+          <button @click="togglePlayPause" class="text-white" aria-label="Lecture ou pause de l'épisode">
             <svg v-if="isPlaying" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
               <path fill="currentColor" d="M14 19V5h4v14zm-8 0V5h4v14z" />
             </svg>
@@ -71,7 +73,7 @@
         </h2>
         <!-- Form add comment -->
         <div class="flex gap-4">
-          <input v-model="newComment" @keydown.enter="submitComment" type="text" class="w-full border-0 border-b-2 bg-transparent text-white mb-5" placeholder="Ajouter un commentaire">
+          <input v-model="newComment" @keydown.enter="submitComment" type="text" class="w-full border-0 border-b-2 bg-transparent text-white mb-5" placeholder="Ajouter un commentaire" aria-label="Ajouter un commentaire">
         </div>
         <div v-for="comment in episode.Comments" :key="comment.id" class="mb-4">
           <div class="flex gap-2 items-start">
@@ -106,10 +108,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onUnmounted } from 'vue';
+import { ref, onMounted, computed, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useEpisodes } from '@/composables/useEpisodes';
-import { useComments } from '@/composables/useComments'; // Correct composable
+import { useComments } from '@/composables/useComments'; 
 
 const { params } = useRoute();
 const { getEpisodeById } = useEpisodes();
@@ -120,27 +122,78 @@ const isPlaying = ref(false);
 const progress = ref(0);
 const progressDotPosition = ref(0);
 const newComment = ref("");
-const isLoading = ref(true); // Ajout de la référence pour l'état de chargement
-const showSuccessAlertEpisode = ref(false);
+const isLoading = ref(true); 
 const showFullDescription = ref(false);
 
 const audio = ref(null);
 
-// Récupérer l'épisode par son ID
+// Function to update media session metadata
+const updateMediaSessionMetadata = () => {
+  if ('mediaSession' in navigator && episode.value) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: episode.value.title,
+      artist: episode.value.Podcasts[0]?.title || 'Unknown',
+      album: 'Podcast',
+      artwork: [
+        { src: episode.value.Podcasts[0]?.thumbnail_path || '', sizes: '512x512', type: 'image/png' }
+      ]
+    });
+
+    navigator.mediaSession.setActionHandler('play', () => {
+      audio.value.play();
+      isPlaying.value = true;
+    });
+
+    navigator.mediaSession.setActionHandler('pause', () => {
+      audio.value.pause();
+      isPlaying.value = false;
+    });
+
+    navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+      audio.value.currentTime = Math.max(audio.value.currentTime - (details.seekOffset || 10), 0);
+    });
+
+    navigator.mediaSession.setActionHandler('seekforward', (details) => {
+      audio.value.currentTime = Math.min(audio.value.currentTime + (details.seekOffset || 10), audio.value.duration);
+    });
+
+    navigator.mediaSession.setActionHandler('stop', () => {
+      audio.value.pause();
+      audio.value.currentTime = 0;
+      isPlaying.value = false;
+    });
+  }
+};
+
+// Fetch episode by ID
 const fetchEpisode = async () => {
   try {
     const loadedEpisode = await getEpisodeById(params.id);
     episode.value = loadedEpisode;
+    updateMediaSessionMetadata();
+    setMetaTags();
   } catch (error) {
     console.error('Error fetching episode:', error);
   } finally {
-    isLoading.value = false; // Fin du chargement
+    isLoading.value = false;
   }
 };
 
+function setMetaTags() {
+  useHead({
+    title: episode.value.title,
+    meta: [
+      { name: 'description', content: episode.value.Podcasts[0].description },
+      { property: 'og:title', content: episode.value.title },
+      { property: 'og:description', content: episode.value.Podcasts[0].description },
+      { property: 'og:image', content: episode.value.Podcasts[0].thumbnail_path },
+    ],
+  });
+}
+
 onMounted(fetchEpisode);
 
-// Mettre en pause ou jouer l'audio
+// Toggle play and pause
 const togglePlayPause = () => {
   if (isPlaying.value) {
     audio.value.pause();
@@ -150,12 +203,35 @@ const togglePlayPause = () => {
   isPlaying.value = !isPlaying.value;
 };
 
-// Mettre à jour la position du point de progression
-const calcProgressDotPosition = computed(() => {
-  return `calc(${progress.value}% - 2px)`;
+// Update progress
+const updateProgress = () => {
+  if (audio.value) {
+    progress.value = (audio.value.currentTime / audio.value.duration) * 100;
+    progressDotPosition.value = progress.value;
+  }
+};
+
+// Watch for audio time update
+onMounted(() => {
+  if (audio.value) {
+    audio.value.addEventListener('timeupdate', updateProgress);
+  }
 });
 
-// Mettre à jour la position de la barre de progression
+// Remove event listener on unmount
+onUnmounted(() => {
+  if (audio.value) {
+    audio.value.removeEventListener('timeupdate', updateProgress);
+  }
+});
+
+watch(isPlaying, (newVal) => {
+  if (newVal) {
+    updateMediaSessionMetadata();
+  }
+});
+
+// Function to handle progress bar click
 const onProgressBarClick = (event) => {
   const progressBar = event.currentTarget;
   const clickPosition = event.offsetX;
@@ -168,36 +244,14 @@ const onProgressBarClick = (event) => {
   audio.value.currentTime = (audio.value.duration / 100) * newProgress;
 };
 
-// Mettre à jour la progression de l'audio
-const updateProgress = () => {
-  if (audio.value) {
-    progress.value = (audio.value.currentTime / audio.value.duration) * 100;
-    progressDotPosition.value = progress.value;
-  }
-};
-
-// Mettre à jour la progression de l'audio
-onMounted(() => {
-  if (audio.value) {
-    audio.value.addEventListener('timeupdate', updateProgress);
-  }
-});
-
-// Supprimer l'écouteur d'événement lors du démontage du composant
-onUnmounted(() => {
-  if (audio.value) {
-    audio.value.removeEventListener('timeupdate', updateProgress);
-  }
-});
-
-// Fonction pour formater la date
+// Function to format date
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   const date = new Date(dateString);
   return date.toLocaleDateString('fr-FR', options);
 };
 
-// Calculer depuis combien de temps le podcast a été créé
+// Calculate time since creation
 const timeSince = (date) => {
   const now = new Date();
   const createdDate = new Date(date);
@@ -226,20 +280,20 @@ const timeSince = (date) => {
   return Math.floor(seconds) + " secondes";
 };
 
-// Soumettre un nouveau commentaire
+// Submit a new comment
 const submitComment = async () => {
   if (newComment.value.trim() === "") return;
 
   try {
     await addComment(params.id, newComment.value);
     newComment.value = "";
-    await fetchEpisode(); // Rafraîchir les commentaires après l'ajout
+    await fetchEpisode(); // Refresh comments after adding
   } catch (error) {
     console.error("Error adding comment:", error);
   }
 };
 
-// Générer une couleur aléatoire
+// Generate a random color
 const randomColor = computed(() => {
   const letters = '0123456789ABCDEF';
   let color = '#';

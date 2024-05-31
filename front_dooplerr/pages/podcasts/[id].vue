@@ -95,14 +95,6 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useEpisodes } from '~/composables/useEpisodes';
-import { usePodcasts } from '~/composables/usePodcasts';
-import Modal from '~/components/Modal.vue';
-import EditPodcastForm from '~/components/EditPodcastForm.vue';
-import AddEpisodeForm from '~/components/AddEpisodeForm.vue';
-import CardEpisode from '~/components/CardEpisode.vue';
 
 const { params } = useRoute();
 const { getEpisodes, getPodcastById } = useEpisodes();
@@ -119,14 +111,30 @@ const showDeleteConfirmation = ref(false);
 const isLoading = ref(true);
 const router = useRouter();
 
+// Récupérer les détails du podcast
 async function fetchPodcastDetails() {
   try {
     podcast.value = await getPodcastById(params.id);
+    setMetaTags();
   } catch (error) {
     console.error('Error fetching podcast details:', error);
   }
 }
 
+// Définir les meta tags de la page
+function setMetaTags() {
+  useHead({
+    title: podcast.value.title,
+    meta: [
+      { name: 'description', content: podcast.value.description },
+      { property: 'og:title', content: podcast.value.title },
+      { property: 'og:description', content: podcast.value.description },
+      { property: 'og:image', content: podcast.value.thumbnail_path },
+    ],
+  });
+}
+
+// Récupérer les épisodes du podcast
 async function fetchPodcastEpisodes() {
   try {
     const episodes = await getEpisodes();
@@ -138,6 +146,7 @@ async function fetchPodcastEpisodes() {
   }
 }
 
+// Supprimer le podcast
 async function deletePodcast() {
   try {
     await deletePodcastById(params.id);
@@ -147,6 +156,7 @@ async function deletePodcast() {
   }
 }
 
+// Lifecycle hooks
 onMounted(async () => {
   await fetchPodcastDetails();
   await fetchPodcastEpisodes();

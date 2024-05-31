@@ -14,8 +14,20 @@ export default defineNuxtConfig({
     ],
     "@nuxtjs/tailwindcss",
     "@vite-pwa/nuxt",
-    "nuxt-icon"
+    "nuxt-icon",
+    "@vueuse/nuxt",
   ],
+  app: {
+    head: {
+      charset: "utf-8",
+      viewport: "width=device-width, initial-scale=1",
+      titleTemplate: "%s - Dooplerr la plateforme de podcasts interactive",
+      meta: [
+        { name: "description", content: "Dooplerr est une web app de podcasts où vous pouvez écouter des podcasts, ajouter les vôtres et interagir avec la communauté." },
+        // Add other default meta tags here
+      ],
+    },
+  },
   pwa: {
     manifest: {
       name: "Dooplerr",
@@ -60,5 +72,5 @@ export default defineNuxtConfig({
     public: {
       BASE_URL: process.env.BASE_URL,
     },
-  }
+  },
 });

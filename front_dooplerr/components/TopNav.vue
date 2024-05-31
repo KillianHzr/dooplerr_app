@@ -1,14 +1,14 @@
 <template>
     <section class="w-full py-10 flex flex-col">
         <div class="flex justify-between">
-            <NuxtLink to="/" active-class="active-link">
+            <NuxtLink to="/" active-class="active-link" aria-label="Accueil">
                 <img src="~/assets/img/logo-dooplerr.png">
             </NuxtLink>
             <div class="flex gap-6">
-                <NuxtLink to="/profile" active-class="active-link">
+                <NuxtLink to="/profile" active-class="active-link" aria-label="Profil">
                     <Icon name="material-symbols:account-circle-full" size="27" />
                 </NuxtLink>
-                <NuxtLink to="/messages" active-class="active-link">
+                <NuxtLink to="/messages" active-class="active-link" aria-label="Messages">
                     <Icon name="akar-icons:send" size="27" />
                 </NuxtLink>
             </div>
